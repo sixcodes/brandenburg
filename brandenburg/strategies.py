@@ -1,0 +1,21 @@
+from typing import List
+
+from brandenburg.providers.aws import AWS
+from brandenburg.providers.gcp import GCP
+
+
+class ProviderStrategy:
+    def __init__(self, strategy: str) -> None:
+        self._strategy = self.__factory(strategy)
+
+    def __factory(self, strategy):
+        try:
+            return {"gcp": GCP(), "aws": AWS()}.get(strategy.lower(), None)
+        except AttributeError as ex:
+            logger.error(ex)
+
+    def context_publish(self, topic: str, data: str, **attrs):
+        self._strategy.publish(topic, data, **attrs)
+
+    def context_create_topics(self, topics: List[str]):
+        self._strategy.create_topics(topics)
