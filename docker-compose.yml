@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  functions:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    restart: always
+    environment:
+      NAMESPACE: dev
+    volumes:
+      - type: bind
+        source: .
+        target: /opt/app
+  redis:
+    image: redis:4-alpine
+    restart: always
+    ports:
+      - "6379:6379"
