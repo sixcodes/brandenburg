@@ -1,0 +1,43 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+brandenburg = {editable = true,path = "."}
+pydantic = "==1.4"
+aioredis = "==1.3.0"
+salesforce-fuelsdk = "==1.3.0"
+email-validator = "==1.0.5"
+phonenumbers = "==8.12.6"
+twilio = "==6.42.0"
+boto3 = "==1.14.7"
+google-cloud-pubsub = "==1.6.0"
+google-cloud-bigquery = "==1.25.0"
+google-cloud-storage = "==1.29.0"
+structlog = "==20.1.0"
+jinja2 = "==2.11.2"
+fastapi = {extras = ["all"],version = "==0.58.0"}
+python-multipart = "==0.0.5"
+
+[dev-packages]
+pytest = "==5.4.3"
+pytest-cov = "==2.8.1"
+pytest-asyncio = "==0.12.0"
+codecov = "==2.0.15"
+mypy = "==0.770"
+black = "==19.3b0"
+isort = "==4.3.15"
+functions-framework = "*"
+
+[requires]
+python_version = "3.7"
+
+[scripts]
+test = "py.test -s -v --cov=./ --cov-report term-missing -v"
+lint = "mypy ./ --ignore-missing-imports"
+fmt = "black -S -t py37 -v --line-length 120 --exclude node_modules/* ."
+fmt-check = "black -t py37 -v --line-length 120 --check --exclude node_modules/* ."
+isort-fmt = "isort --apply --recursive -j 4 --line-width 120 --use-parentheses --no-inline-sort --multi-line 3 --trailing-comma brandenburg tests"
+isort-check = "isort --check-only --recursive -j 4 --line-width 120 --use-parentheses --no-inline-sort --multi-line 3 --trailing-comma brandenburg tests"
+clean = "rm -vrf ./build ./dist ./*.pyc ./*.tgz ./*.egg-info ./out ./*/out ./.mypy_cache ./*/.mypy_cache */.pytest_cache .pytest_cache .serverless/*"
