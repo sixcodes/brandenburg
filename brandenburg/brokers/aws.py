@@ -1,9 +1,8 @@
+from interfaces import BrokerInterface
+from config import settings
+from brandenburg.toolbox.logger import log
 import boto3
 from boto3 import Session
-
-from brandenburg.toolbox.logger import log
-from config import settings
-from interfaces import BrokerInterface
 
 logger = log.get_logger(__name__)
 
@@ -21,7 +20,7 @@ class AWSBroker(BrokerInterface):
     def send_sms(cls, phone: str, message: str, type: str = "Transactional") -> bool:
         # FIXME: Turn it generic to just send sms
 
-        sns = cls.get_session.client("sns")
+        sns = cls.get_session().client("sns")
 
         try:
             response = sns.publish(
@@ -34,8 +33,9 @@ class AWSBroker(BrokerInterface):
             )
             logger.info(response)
             if response.get("ResponseMetadata", {}).get("HTTPStatusCode") == 200:
-
                 return True
+
+            return False
         except InvalidParameterException as ex:
             logger.info(ex)  # FIXME: temp dumb solution
             return False

@@ -1,5 +1,4 @@
-from fastapi import Depends, FastAPI, Header, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
 from fastapi.security import OAuth2PasswordBearer
 
@@ -43,7 +42,11 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 # )
 
 
-app.include_router(leads.router, prefix="/v1", tags=["leads"], responses={404: {"description": "Not found"}})
+app.include_router(leads.router, prefix="/v1", tags=["leads"], responses={
+    404: {
+        "description": "Not found"
+    }
+})
 
 app.include_router(
     imports.router,
@@ -58,6 +61,6 @@ app.include_router(
 async def startup_event():
     # TODO: Move PUBSUB/SQS connection to here
     logger.info(f"Check all topics on {settings.PROVIDER}")
-    ProviderStrategy(settings.PROVIDER)._strategy.create_topics(
-        [f"{topic}_{settings.NAMESPACE}" for topic in settings.TOPICS.split(",")]
-    )
+    # ProviderStrategy(settings.PROVIDER)._strategy.create_topics(
+    #     [f"{topic}_{settings.NAMESPACE}" for topic in settings.TOPICS.split(",")]
+    # )

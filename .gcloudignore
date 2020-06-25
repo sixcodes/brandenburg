@@ -31,3 +31,5 @@ docker-compose.yml
 package*.json
 conftest.py
 .dockerignore
+
+.vscode/

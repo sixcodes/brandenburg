@@ -129,3 +129,5 @@ node_modules/
 
 #GCP auth file
 brandenburg.json
+
+.vscode/
