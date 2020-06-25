@@ -1,7 +1,6 @@
-from typing import List, Tuple, Dict, Union
+from typing import Dict
 
 import ET_Client
-import ujson as json
 from structlog import get_logger
 
 from brandenburg.config import settings

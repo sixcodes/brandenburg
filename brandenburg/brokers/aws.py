@@ -20,7 +20,7 @@ class AWSBroker(BrokerInterface):
     def send_sms(cls, phone: str, message: str, type: str = "Transactional") -> bool:
         # FIXME: Turn it generic to just send sms
 
-        sns = cls.get_session().client("sns")
+        sns = cls.get_session.client("sns")
 
         try:
             response = sns.publish(
