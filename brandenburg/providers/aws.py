@@ -17,3 +17,6 @@ class AWS(ProviderInterface):
 
     def create_topics(self, topics: List[str]):
         raise NotImplementedError("create_topics method is not implemented!")
+
+    def upload_file(self):
+        pass

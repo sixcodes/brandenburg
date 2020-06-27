@@ -15,6 +15,10 @@ class ProviderInterface(metaclass=ABCMeta):
     def create_topics(self, topics: List[str]) -> None:
         raise NotImplementedError("create_topics method is not implemented!")
 
+    @abstractmethod
+    def upload_file(self, path: str, file: bytes, **kwargs) -> None:
+        raise NotImplementedError("publish method is not implemented!")
+
 
 class BrokerInterface(metaclass=ABCMeta):
     def __init__(self, succeeding=None):

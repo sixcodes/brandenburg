@@ -1,8 +1,7 @@
 import json
 from typing import Tuple, List, Dict
 
-from google.cloud import pubsub_v1
-from google.cloud.bigquery import Client
+from google.cloud import pubsub_v1, storage
 from google.oauth2 import service_account
 from google.oauth2.service_account import Credentials
 from pydantic.types import Json
@@ -85,3 +84,13 @@ class GCP(ProviderInterface):
         client = pubsub_v1.PublisherClient(client_config=retry_settings, credentials=self.get_credentials())
         future = client.publish(topic_name, data, **attrs)
         logger.info(f"Futures: {future.result()}")
+
+    def upload_file(self, path: str, file: bytes, **kwargs):
+        """
+        TODO: add exception cases and return statement
+        """
+        bucket = storage.Client(project=settings.GOOGLE_PROJECT_ID, credentials=self.get_credentials()).get_bucket(
+            settings.BUCKET_STAGE
+        )
+
+        blob = storage.Blob(path, bucket).upload_from_file(file)
