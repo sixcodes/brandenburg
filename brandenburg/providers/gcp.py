@@ -16,6 +16,9 @@ logger = get_logger(__name__)
 
 class GCP(ProviderInterface):
     def get_credentials(self):
+        """
+        TODO: checkif credentials exist if not try to auth with local credentials
+        """
         scopes: Tuple[str] = (
             "https://www.googleapis.com/auth/bigquery",
             "https://www.googleapis.com/auth/cloud-platform",
