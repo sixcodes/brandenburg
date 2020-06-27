@@ -13,6 +13,6 @@ logger = log.get_logger(__name__)
 class BatchService:
     async def execute(batch: BatchModel, routing_key: str, action: str = "upsert") -> Tuple[BatchModel, bool]:
         batch.action = action
-        res = await PublisherService.publish(batch.dict(), "import_push")
+        res = await PublisherService.publish(batch.dict(), routing_key)
         logger.info(f"sent_to_topic: {bool(res)}, batch: {batch}")
         return batch, True
