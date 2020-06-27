@@ -1,6 +1,6 @@
 import os
 from functools import lru_cache
-from typing import List, Set
+from typing import List, Tuple
 
 from pydantic import BaseSettings, RedisDsn
 
@@ -16,10 +16,12 @@ class Settings(BaseSettings):
     PROD: bool = False
     NAMESPACE: str = "dev"
 
+    AUTH_USERS: List[List[str]] = [["ADMIN", "xyz"]]
+
     ALLOWED_HOSTS: str = "*"
     REDIS_URL: str = "redis://localhost:6379"
 
-    DEFAULT_LOCALE: str = "pt_BR"
+    DEFAULT_LOCALE: str = "pt-BR"
     PROVIDER: str = "gcp"  # Option: aws or gcp
     TOPICS: str = "email,sms,whatsapp,salesforce,sap,import_push"
 

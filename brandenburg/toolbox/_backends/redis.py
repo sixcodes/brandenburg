@@ -53,3 +53,9 @@ class RedisBackend(BaseBackend):
             await self._conn.set(key, value)
             return key, True
         return key, False
+
+    async def get(self, key: str) -> str:
+        value: bytes = await self._conn.get(key)
+        if value:
+            return value.decode()
+        return ""
