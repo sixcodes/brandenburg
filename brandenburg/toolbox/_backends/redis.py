@@ -26,7 +26,7 @@ class RedisBackend(BaseBackend):
         try:
             await self._conn.set(key, value)
             await self._conn.expire(key, ttl)
-            logger.info(f"Key: {key}, Value: {value} ")
+            logger.info(f"Configuring cache for key: {key}")
             return True
         except ReplyError as ex:
             logger.error(ex)
