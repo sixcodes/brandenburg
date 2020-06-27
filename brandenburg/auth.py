@@ -9,7 +9,7 @@ try:
     from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
     security = HTTPBasic()
-except:
+except ImportError:
     pass
 
 cache = RedisBackend(settings.REDIS_URL)
@@ -38,7 +38,7 @@ async def create_users(auth_users: List[List[str]] = None) -> None:
     Create users on cache to be used on auth system
 
     """
-    TTL: int = 525600  # One year
+    TTL: int = 525600  # One year #TODO: turn it flexible
     await cache.connect()
     for value in settings.AUTH_USERS:
         await cache.set_cache(value[0], value[1], TTL)

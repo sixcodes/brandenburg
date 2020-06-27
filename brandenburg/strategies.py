@@ -19,3 +19,6 @@ class ProviderStrategy:
 
     def context_create_topics(self, topics: List[str]):
         self._strategy.create_topics(topics)
+
+    def context_upload_file(self, path: str, file: bytes, **kwargs):
+        self._strategy.upload_file(path, file, **kwargs)
