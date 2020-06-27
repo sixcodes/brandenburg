@@ -2,7 +2,7 @@ import os
 from functools import lru_cache
 from typing import List, Tuple
 
-from pydantic import BaseSettings, RedisDsn
+from pydantic import BaseSettings, RedisDsn, Json
 
 
 class Settings(BaseSettings):
@@ -18,12 +18,13 @@ class Settings(BaseSettings):
 
     AUTH_USERS: List[List[str]] = [["ADMIN", "xyz"]]
 
-    ALLOWED_HOSTS: str = "*"
+    ALLOWED_HOSTS: List[str] = ["*"]
     REDIS_URL: str = "redis://localhost:6379"
 
     DEFAULT_LOCALE: str = "pt-BR"
     PROVIDER: str = "gcp"  # Option: aws or gcp
-    TOPICS: str = "email,sms,whatsapp,salesforce,sap,import_push"
+    TOPICS: List[str] = ["email", "sms", "whatsapp", "salesforce", "sap", "import_push"]
+    BUCKET_STAGE: str = ""
 
     # SALESFORCE
     SF_CLIENT_ID: str = ""
@@ -41,7 +42,7 @@ class Settings(BaseSettings):
 
     # GOOGLE
     GOOGLE_PROJECT_ID: str = ""
-    GOOGLE_CREDENTIALS: str = ""
+    GOOGLE_CREDENTIALS: str = ""  # TODO: CHange this type to Json
     GOOGLE_TEMPLATE_BUCKET: str = ""
 
     # AWS
