@@ -39,7 +39,7 @@ app.openapi = custom_openapi
 # README: CORS configuration
 # app.add_middleware(
 #     CORSMiddleware,
-#     allow_origins=settings.ALLOWED_HOSTS.split(","),
+#     allow_origins=settings.ALLOWED_HOSTS,
 #     allow_credentials=True,
 #     allow_methods=["*"],
 #     allow_headers=["*"],
@@ -70,7 +70,7 @@ async def startup_event():
     # TODO: Move PUBSUB/SQS connection to here
     logger.info(f"Check all topics on {settings.PROVIDER}")
     ProviderStrategy(settings.PROVIDER)._strategy.create_topics(
-        [f"{topic}_{settings.NAMESPACE}" for topic in settings.TOPICS.split(",")]
+        [f"{topic}_{settings.NAMESPACE}" for topic in settings.TOPICS]
     )
     logger.info("creating auth users")
     await create_users()

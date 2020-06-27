@@ -41,7 +41,7 @@ def test_send_action_batch(client):
 
 
 @pytest.mark.xfail
-def test_shcema_mapping_without_key_names(client):
+def test_schema_mapping_without_key_names(client):
     pass
 
 
@@ -52,4 +52,22 @@ def test_send_empty_values(client):
 
 @pytest.mark.xfail
 def test_send_more_than_10k_records(client):
+    pass
+
+
+@pytest.mark.xfail
+def test_send_file_ok(client):
+    pass
+
+
+@pytest.mark.xfail
+def test_send_empty_file_param(client):
+    pass
+
+
+@pytest.mark.xfail
+def test_send_file_and_check_background_function(client):
+    """
+    Check if the files was uploaded
+    """
     pass
