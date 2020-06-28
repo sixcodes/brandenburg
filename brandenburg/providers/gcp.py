@@ -23,9 +23,13 @@ class GCP(ProviderInterface):
             "https://www.googleapis.com/auth/cloud-platform",
             "https://www.googleapis.com/auth/drive",
         )
-        google_credentials: Dict[str, str] = json.loads(settings.GOOGLE_CREDENTIALS)
+        credentials: Credentials
+        google_credentials: Json = settings.GOOGLE_CREDENTIALS
+        if google_credentials:
+            credentials = Credentials.from_service_account_info(google_credentials)
+        else:
+            credentials = Credentials()
         logger.info("Authenticating on GCP")
-        credentials = Credentials.from_service_account_info(google_credentials)
         credentials = credentials.with_scopes(scopes)
         return credentials
 

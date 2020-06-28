@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     NAMESPACE: str = "dev"
 
     AUTH_USERS: List[List[str]] = [["ADMIN", "xyz"]]
+    BATCH_LIMIT: int = 1000
 
     ALLOWED_HOSTS: List[str] = ["*"]
     REDIS_URL: str = "redis://localhost:6379"
@@ -38,11 +39,16 @@ class Settings(BaseSettings):
     TWILIO_EDGE: str = ""
 
     # SENDGRID
-    # Mandrill
+    SENDGRID_USERNAME: str = ""
+    SENDGRID_PASSWORD: str = ""
+
+    # Mailgun
+    MAILGUN_USERNAME: str = ""
+    MAILGUN_PASSWORD: str = ""
 
     # GOOGLE
     GOOGLE_PROJECT_ID: str = ""
-    GOOGLE_CREDENTIALS: str = ""  # TODO: CHange this type to Json
+    GOOGLE_CREDENTIALS: Json = {}
     GOOGLE_TEMPLATE_BUCKET: str = ""
 
     # AWS
