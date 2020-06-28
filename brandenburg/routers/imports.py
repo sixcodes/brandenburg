@@ -30,7 +30,6 @@ async def import_batch(batch: BatchModel, request: Request):
     When data for a table is pushed for the first time,
     the function/lambda will create the table in the destination in the specified schema mapping
     field.
-    
     """
     logger.info(f"request: X, headers: {dict(request.headers)}, ip: {request.client.host}")
     result, processed = await BatchService.execute(batch, batch.service_id)

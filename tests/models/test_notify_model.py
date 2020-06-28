@@ -1,5 +1,5 @@
 import copy
-from typing import Dict, Union
+from typing import Dict, Collection
 
 import pytest
 import ujson as json
@@ -7,7 +7,7 @@ from pydantic import EmailStr, ValidationError
 
 from brandenburg.models.notify import NotifyModel
 
-NOTIFY: Dict[str, Union[str, EmailStr]] = {
+NOTIFY: Dict[str, Collection[str]] = {
     "contact": "abc@admin.com",
     "by": "sms",
     "template_name": "password_reset",
