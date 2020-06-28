@@ -1,1 +1,1 @@
-web: brandenburg.main:app --log-file -
+web: brandenburg.main:app --port $PORT --log-file -
