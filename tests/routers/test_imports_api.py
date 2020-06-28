@@ -14,7 +14,7 @@ DATA: Dict[str, str] = {
 }
 
 
-HEADERS: Dict[str, str] = {"Origin": "*/*", "Content-Type": "application/json"}
+HEADERS: Dict[str, str] = {"Origin": "*/*", "Content-Type": "application/json", "Authorization": "Basic QURNSU46eHl6"}
 
 
 def test_api_good_request(client):
