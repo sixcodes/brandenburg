@@ -3,13 +3,22 @@ from typing import Tuple, List, Dict, Union, Set, Optional
 
 from pydantic import BaseModel, Field, Json, validator, root_validator
 
-BATCH_LIMIT: int = 10000
+BATCH_LIMIT: int = 1000
 
 
 class SchemaMapping(BaseModel):
+    """
+    :param type:
+    :param name:
+    :param is_nullable:
+
+    Eg:
+        {"type": "STRING", "name": "document_number", "is_nullable": true}
+    """
+
     type: str = Field(title="Column data type", default="")
     name: str = Field(title="Name", default="")
-    is_nullable: bool = Field(title="xyz", default=True)
+    is_nullable: bool = Field(title="If the field can be NULL", default=True)
 
 
 class BatchModel(BaseModel):
@@ -27,13 +36,13 @@ class BatchModel(BaseModel):
         min_items=1,
         max_items=BATCH_LIMIT,
     )
-    action: str = Field("upsert", title="This will always be upsert.", choices=(("upsert", "batch")))
     sdc_received_at: Optional[str]
     sdc_sequence: Optional[int]
     key_names: Optional[List[str]] = Field(
         list(), title="""An array of strings representing the Primary Key fields in the destination table."""
     )
     schema_mapping: Optional[List[SchemaMapping]] = Field(list(), title="""The table schema""")
+    action: str = Field(..., title="This will always be upsert.", choices=(("upsert", "batch")))
 
     def __init__(
         self,
@@ -44,7 +53,10 @@ class BatchModel(BaseModel):
         **kwargs,
     ) -> None:
         """
-        param: sdc_sequence An integer that tells the Import API the order in which data points in the request body should be
+        :param service_id: 
+        :param table_name:
+        :param action:
+        :param sdc_sequence: An integer that tells the Import API the order in which data points in the request body should be
         considered for loading. This data will be stored in the destination table in the _sequence column.
         This API uses a Unix epoch (in milliseconds) as the value for this property.
         Note: This value cannot exceed the maximum of 9223372036854775807. 
@@ -68,17 +80,17 @@ class BatchModel(BaseModel):
         """
         assert isinstance(value, list) == True
         if len(value) > BATCH_LIMIT:
-            raise ValueError("Field data exceed 10000 records.")
+            raise ValueError(f"Field data exceed {BATCH_LIMIT} records.")
         if not len(value):
             raise ValueError("Field data cannot be empty.")
         return value
 
-    # @validator("schema_mapping")
-    # def schema_mapping_validator(cls, value, values):
-    #     if "key_names" in values:
-    #     # import ipdb; ipdb.set_trace()
-    #         if not len(values["key_names"]) or not len(value):
-    #             raise ValueError("Field key_names cannot be empty when there is schema mapping")
+    @validator("action")
+    def action_validator(cls, value, values):
+        if value == "batch":
+            # import ipdb; ipdb.set_trace()
+            if not len(values["schema_mapping"]) or not len(values["key_names"]):
+                raise ValueError("Fields schema_mapping and key_names cannot be empty when action is batch")
 
     # @validator("key_names", pre=True, always=True)
     # def key_names_validator(cls, value, values):
