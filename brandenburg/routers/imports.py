@@ -17,7 +17,7 @@ router = APIRouter()
 )
 async def import_push(batch: BatchModel, request: Request):
     logger.info(f"request: X, headers: {dict(request.headers)}, ip: {request.client.host}")
-    result, processed = await BatchService.execute(batch, "import_push")
+    result, processed = await BatchService.execute(batch, batch.service_id)
     return UJSONResponse(status_code=status.HTTP_201_CREATED, content={"status": "OK", "message": "Batch Accepted!"})
 
 
@@ -32,12 +32,14 @@ async def import_batch(batch: BatchModel, request: Request):
     field.
     
     """
-    return {}
+    logger.info(f"request: X, headers: {dict(request.headers)}, ip: {request.client.host}")
+    result, processed = await BatchService.execute(batch, batch.service_id)
+    return UJSONResponse(status_code=status.HTTP_201_CREATED, content={"status": "OK", "message": "Batch Accepted!"})
 
 
-@router.post("/import/file/", status_code=202, responses={202: {"status": "ok"}})
-async def import_file(name: str, hash: str, background_tasks: BackgroundTasks, file: UploadFile = File(...)):
-    background_tasks.add_task(BatchService.upload, name, file.filename, file.file, hash)
+@router.post("/import/file/", status_code=202, responses={202: {"status": "ok", "message": "File accepted"}})
+async def import_file(name: str, md5sum: str, background_tasks: BackgroundTasks, file: UploadFile = File(...)):
+    background_tasks.add_task(BatchService.upload, name, file.filename, file.file, md5sum)
     # TODO: Create a hash from hash parameter and return it to be checked from requested
     logger.info("File was sent to background task.")
     return UJSONResponse(status_code=status.HTTP_202_ACCEPTED, content={"status": "ok", "message": "File accepted"})

@@ -7,7 +7,7 @@ import ujson as json
 from brandenburg.config import settings
 
 DATA: Dict[str, str] = {
-    "service_id": "partner1",
+    "service_id": "sap",
     "table_name": "user",
     "data": [{"id": 1, "name": "Maria"}],
     "action": "upsert",
@@ -25,6 +25,11 @@ def test_api_good_request(client):
 def test_api_get_400_with_wrong_data(client):
     res = client.post(f"/v1/import/push/", json={"a": 1}, headers=HEADERS)
     assert res.status_code == 422
+
+
+def test_api_get_401_without_auth(client):
+    res = client.post(f"/v1/import/push/", json={"a": 1})
+    assert res.status_code == 401
 
 
 @pytest.mark.xfail
