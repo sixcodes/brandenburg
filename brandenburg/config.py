@@ -12,7 +12,7 @@ class Settings(BaseSettings):
 
     DEBUG: bool = True
     PORT: str = "8000"
-    ACCESS_LOG: bool = False
+    LOG_LEVEL: str = "trace" # [critical|error|warning|info|debug|trace]
     PROD: bool = False
     NAMESPACE: str = "dev"
 
