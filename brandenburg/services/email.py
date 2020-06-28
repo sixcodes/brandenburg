@@ -8,8 +8,6 @@ from structlog import get_logger
 
 from brokers.aws import AWSBroker
 from config import settings
-
-# TODO: move to a good place
 from providers.gcp import GCP
 
 logger = get_logger(__name__)
