@@ -21,6 +21,8 @@ class Settings(BaseSettings):
 
     ALLOWED_HOSTS: List[str] = ["*"]
     REDIS_URL: str = "redis://localhost:6379"
+    REDIS_POOL_MIN_SIZE: int = 1
+    REDIS_POOL_MAX_SIZE: int = 20
 
     DEFAULT_LOCALE: str = "pt-BR"
     PROVIDER: str = "gcp"  # Option: aws or gcp
