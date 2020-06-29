@@ -29,8 +29,7 @@ class Funcs:
 
     @classmethod
     async def generate_token(cls, value: str = "") -> str:
-        redis = RedisBackend(settings.REDIS_URL)
-        await redis.connect()
+        redis = await RedisBackend(settings.REDIS_URL).get_instance()
         token: str = await cls._generate_token()
         ok: bool = await redis.set_cache(token, value)
         if not ok:
