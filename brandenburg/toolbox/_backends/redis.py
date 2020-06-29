@@ -5,7 +5,7 @@ import aioredis
 from aioredis.errors import ReplyError
 
 from brandenburg.toolbox.logger import log
-
+from brandenburg.config import settings
 from .base import BaseBackend
 
 logger = log.get_logger(__name__)
@@ -14,7 +14,7 @@ logger = log.get_logger(__name__)
 class RedisBackend:
     __instance = None
 
-    def __new__(cls, url):
+    def __new__(cls, url: str):
         if RedisBackend.__instance is None:
             RedisBackend.__instance = object.__new__(cls)
         RedisBackend.__instance.url = url
@@ -35,13 +35,16 @@ class RedisBackend:
     @classmethod
     async def _get_new_conn(cls) -> None:
         loop = asyncio.get_event_loop()
-        return await aioredis.create_redis(cls.__instance.url, loop=loop)
+        return await aioredis.create_redis_pool(
+            cls.__instance.url, minsize=settings.REDIS_POOL_MIN_SIZE, maxsize=settings.REDIS_POOL_MAX_SIZE, loop=loop
+        )
 
     @classmethod
     async def set_cache(cls, key: str, value: str = "x", ttl: int = 3600) -> bool:
         try:
-            await cls.__instance.conn.set(key, value)
-            await cls.__instance.conn.expire(key, ttl)
+            with await cls.__instance.conn as cache:
+                await cache.set(key, value)
+                await cache.expire(key, ttl)
             logger.info(f"Configuring cache for key: {key}")
             return True
         except ReplyError as ex:
@@ -51,7 +54,8 @@ class RedisBackend:
     @classmethod
     async def is_valid_token(cls, token: str) -> bool:
         try:
-            exists: str = await cls.__instance.conn.exists(token)
+            with await cls.__instance.conn as cache:
+                exists: str = await cache.exists(token)
             if exists:
                 return True
         except ReplyError as ex:
@@ -71,8 +75,11 @@ class RedisBackend:
             return key, True
         return key, False
 
-    async def get(self, key: str) -> str:
-        value: bytes = await self.__instance.conn.get(key)
+    @classmethod
+    async def get(cls, key: str) -> str:
+
+        with await cls.__instance.conn as cache:
+            value: bytes = await cache.get(key)
         if value:
             return value.decode()
         return ""
