@@ -4,15 +4,16 @@ from typing import Tuple, Optional
 import aioredis
 from aioredis.errors import ReplyError
 
-from brandenburg.toolbox.logger import log
 from brandenburg.config import settings
+from brandenburg.toolbox.logger import log
+
 from .base import BaseBackend
 
 logger = log.get_logger(__name__)
 
 
 class RedisBackend:
-    __instance = None
+    __instance: aioredis.Redis = None
 
     def __new__(cls, url: str):
         if RedisBackend.__instance is None:
@@ -38,6 +39,12 @@ class RedisBackend:
         return await aioredis.create_redis_pool(
             cls.__instance.url, minsize=settings.REDIS_POOL_MIN_SIZE, maxsize=settings.REDIS_POOL_MAX_SIZE, loop=loop
         )
+
+    @classmethod
+    async def disconnect(cls) -> None:
+        with await cls.__instance.conn as cache:
+            await cache.clear()
+            await cache.wait_close()
 
     @classmethod
     async def set_cache(cls, key: str, value: str = "x", ttl: int = 3600) -> bool:

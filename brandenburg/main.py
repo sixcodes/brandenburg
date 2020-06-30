@@ -1,3 +1,5 @@
+from functools import lru_cache
+
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
@@ -36,6 +38,11 @@ app.openapi = custom_openapi
 # oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
 
+@lru_cache()
+def get_settings():
+    return settings
+
+
 # README: CORS configuration
 # app.add_middleware(
 #     CORSMiddleware,
@@ -52,7 +59,7 @@ app.include_router(
     imports.router,
     prefix="/v1",
     tags=["import"],
-    dependencies=[Depends(get_fast_auth)],
+    dependencies=[Depends(get_settings), Depends(get_fast_auth)],
     responses={404: {"description": "Not found"}},
 )
 
@@ -74,3 +81,12 @@ async def startup_event():
     )
     logger.info("creating auth users")
     await create_users()
+
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    from brandenburg.toolbox._backends.redis import RedisBackend
+
+    cache = await RedisBackend(settings.REDIS_URL).get_instance()
+    await cache.disconnect()
+    logger.debug("================>III Shutting down")
