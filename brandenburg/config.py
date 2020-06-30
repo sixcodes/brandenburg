@@ -1,5 +1,4 @@
 import os
-from functools import lru_cache
 from typing import List, Tuple
 
 from pydantic import BaseSettings, RedisDsn, Json
@@ -57,11 +56,6 @@ class Settings(BaseSettings):
     AWS_SERVER_PUBLIC_KEY: str = ""
     AWS_SERVER_SECRET_KEY: str = ""
     AWS_REGION: str = "us-east-1"
-
-
-@lru_cache(512)
-def settings():
-    pass
 
 
 settings = Settings()
