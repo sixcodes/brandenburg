@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "26e97b00dc720868a5d5c890b5bb0510cd9d8354b1e9cbbad5e72c73450b261f"
+            "sha256": "a99a755ca463a46aac50f765925babf047681b0e94d29f1601e99c84bf6654a3"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -49,10 +49,10 @@
         },
         "botocore": {
             "hashes": [
-                "sha256:45934d880378777cefeca727f369d1f5aebf6b254e9be58e7c77dd0b059338bb",
-                "sha256:a94e0e2307f1b9fe3a84660842909cd2680b57a9fc9fb0c3a03b0afb2eadbe21"
+                "sha256:37b65cc48c99b7dd4d5606e56f76ecd88eb7be392ea8a166df734a6b3035301c",
+                "sha256:5ac9b53a75852fe4282be8741c8136e6948714fef6eff1bd9babb861f8647ba3"
             ],
-            "version": "==1.17.12"
+            "version": "==1.17.13"
         },
         "brandenburg": {
             "editable": true,
@@ -101,10 +101,6 @@
             ],
             "version": "==0.15.2"
         },
-        "e1839a8": {
-            "editable": true,
-            "path": "."
-        },
         "email-validator": {
             "hashes": [
                 "sha256:e3e6ede1765d7c1e580d2050d834b2689361f7da2d50ce74df6a5968fca7cb13"
@@ -134,21 +130,6 @@
             ],
             "version": "==1.18.0"
         },
-        "google-cloud-bigquery": {
-            "hashes": [
-                "sha256:7466163fa6bd9c923944c566dcafa5191214db8896657ee5feb1859a63e0ba2a",
-                "sha256:be035d9cbcce907bee971861567848384748a88977d1ad608e7818da283e6c14"
-            ],
-            "index": "pypi",
-            "version": "==1.25.0"
-        },
-        "google-cloud-core": {
-            "hashes": [
-                "sha256:6ae5c62931e8345692241ac1939b85a10d6c38dc9e2854bdbacb7e5ac3033229",
-                "sha256:878f9ad080a40cdcec85b92242c4b5819eeb8f120ebc5c9f640935e24fc129d8"
-            ],
-            "version": "==1.3.0"
-        },
         "google-cloud-pubsub": {
             "hashes": [
                 "sha256:227829aa0b6534d6cf34b96c7d6cf5d3e9dbaf569253439e78caee857d83d0ca",
@@ -156,21 +137,6 @@
             ],
             "index": "pypi",
             "version": "==1.6.0"
-        },
-        "google-cloud-storage": {
-            "hashes": [
-                "sha256:15c8ab11d17e3a32c154662bb001c2097515799f3fd4947a10b1fceb7b6e9a1e",
-                "sha256:958b4ec0ec0104ea2d436606a4d39eb6c5cf719b8b69d1676de75294bf02de3e"
-            ],
-            "index": "pypi",
-            "version": "==1.29.0"
-        },
-        "google-resumable-media": {
-            "hashes": [
-                "sha256:97155236971970382b738921f978a6f86a7b5a0b0311703d991e065d3cb55773",
-                "sha256:cdc64378dc9a7a7bf963a8d0c944c99b549dc0c195a9acbf1fcd465f380b9002"
-            ],
-            "version": "==0.5.1"
         },
         "googleapis-common-protos": {
             "hashes": [
@@ -438,13 +404,6 @@
             "index": "pypi",
             "version": "==1.4"
         },
-        "pyjwt": {
-            "hashes": [
-                "sha256:5c6eca3c2940464d106b99ba83b00c6add741c9becaec087fb7ccdefea71350e",
-                "sha256:8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96"
-            ],
-            "version": "==1.7.1"
-        },
         "python-dateutil": {
             "hashes": [
                 "sha256:73ebfe9dbf22e832286dafa60473e4cd239f8592f699aa5adaf10050e6e1823c",
@@ -488,14 +447,6 @@
             ],
             "version": "==0.3.3"
         },
-        "salesforce-fuelsdk": {
-            "hashes": [
-                "sha256:e9210594f9503a326c098695fc8f07f385ba8440e01e51ec7ebaf3655e8987bb",
-                "sha256:f88d02e13a93541aebaccf48ed0425735349a4289a303cae841696926ea988d0"
-            ],
-            "index": "pypi",
-            "version": "==1.3.0"
-        },
         "six": {
             "hashes": [
                 "sha256:30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259",
@@ -517,20 +468,6 @@
             ],
             "index": "pypi",
             "version": "==20.1.0"
-        },
-        "suds-jurko": {
-            "hashes": [
-                "sha256:1cb7252cb13018fc32887c3a834ed7c6648a5b5c4c159be5806da2e1785399e8",
-                "sha256:29edb72fd21e3044093d86f33c66cf847c5aaab26d64cb90e69e528ef014e57f"
-            ],
-            "version": "==0.6"
-        },
-        "twilio": {
-            "hashes": [
-                "sha256:9d423321d577cab175712e4cc3636b68534572c3ab1c6c5b191925d3abac0223"
-            ],
-            "index": "pypi",
-            "version": "==6.42.0"
         },
         "ujson": {
             "hashes": [
