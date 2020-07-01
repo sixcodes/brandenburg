@@ -6,7 +6,7 @@ from fastapi.openapi.utils import get_openapi
 
 from brandenburg.auth import get_fast_auth, create_users
 from brandenburg.config import settings
-from brandenburg.routers import imports, leads
+from brandenburg.routers import imports, leads, notify
 from brandenburg.strategies import ProviderStrategy
 from brandenburg.toolbox.logger import log
 
@@ -59,6 +59,14 @@ app.include_router(
     imports.router,
     prefix="/v1",
     tags=["import"],
+    dependencies=[Depends(get_settings), Depends(get_fast_auth)],
+    responses={404: {"description": "Not found"}},
+)
+
+app.include_router(
+    notify.router,
+    prefix="/v1",
+    tags=["notify"],
     dependencies=[Depends(get_settings), Depends(get_fast_auth)],
     responses={404: {"description": "Not found"}},
 )
