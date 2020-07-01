@@ -13,7 +13,7 @@ router = APIRouter()
 
 
 @router.post(
-    "/import/push/", tags=["import"], status_code=201, responses={201: {"status": "OK", "message": "Batch Accepted!"}}
+    "/import/push/", status_code=201, responses={201: {"status": "OK", "message": "Batch Accepted!"}}
 )
 async def import_push(batch: BatchModel, request: Request):
     logger.info(f"request: X, headers: {dict(request.headers)}, ip: {request.client.host}")
@@ -21,7 +21,7 @@ async def import_push(batch: BatchModel, request: Request):
     return UJSONResponse(status_code=status.HTTP_201_CREATED, content={"status": "OK", "message": "Batch Accepted!"})
 
 
-@router.post("/import/batch/", tags=["import"], status_code=201)
+@router.post("/import/batch/", status_code=201)
 async def import_batch(batch: BatchModel, request: Request):
     """
     Pushes a record or multiple records for a specified table to lake.

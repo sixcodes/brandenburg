@@ -20,7 +20,7 @@ async def get_lead_token(request: Request):
 
 
 @router.post(
-    "/leads/{token}/", tags=["leads"], status_code=201, responses={201: {"status": "OK", "message": "Batch Accepted!"}}
+    "/leads/{token}/", status_code=201, responses={201: {"status": "OK", "message": "Batch Accepted!"}}
 )
 async def create_lead(lead: LeadModel, request: Request, token: str):
     logger.info(

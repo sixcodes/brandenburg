@@ -53,12 +53,12 @@ def get_settings():
 # )
 
 
-app.include_router(leads.router, prefix="/v1", tags=["leads"], responses={404: {"description": "Not found"}})
+app.include_router(leads.router, prefix="/v1", tags=["Leads"], responses={404: {"description": "Not found"}})
 
 app.include_router(
     imports.router,
     prefix="/v1",
-    tags=["import"],
+    tags=["Import"],
     dependencies=[Depends(get_settings), Depends(get_fast_auth)],
     responses={404: {"description": "Not found"}},
 )
@@ -66,7 +66,7 @@ app.include_router(
 app.include_router(
     notify.router,
     prefix="/v1",
-    tags=["notify"],
+    tags=["Notify"],
     dependencies=[Depends(get_settings), Depends(get_fast_auth)],
     responses={404: {"description": "Not found"}},
 )
