@@ -15,7 +15,6 @@ except ImportError:
     pass
 
 
-
 async def get_fast_auth(
     credentials: HTTPBasicCredentials = Depends(security),
     cache: aioredis.Redis = Depends(RedisBackend(settings.REDIS_URL).get_instance),
