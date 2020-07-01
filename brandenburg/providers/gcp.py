@@ -1,19 +1,21 @@
 import json
+from functools import lru_cache
 from typing import Tuple, List, Dict
 
 from google.cloud import pubsub_v1, storage
 from google.oauth2 import service_account
 from google.oauth2.service_account import Credentials
 from pydantic.types import Json
-from structlog import get_logger
 
 from brandenburg.config import settings
 from brandenburg.interfaces import ProviderInterface
+from brandenburg.toolbox.logger import log
 
-logger = get_logger(__name__)
+logger = log.get_logger(__name__)
 
 
 class GCP(ProviderInterface):
+    @lru_cache(512)
     def get_credentials(self):
         """
         TODO: checkif credentials exist if not try to auth with local credentials
@@ -38,7 +40,7 @@ class GCP(ProviderInterface):
             TODO: Add a return statement and handle with exceptions
         """
         GOOGLE_PROJECT_ID: str = settings.GOOGLE_PROJECT_ID
-        client: PublisherClient = pubsub_v1.PublisherClient(credentials=self.get_credentials())
+        client: pubsub_v1.PublisherClient = pubsub_v1.PublisherClient(credentials=self.get_credentials())
         project = client.project_path(GOOGLE_PROJECT_ID)
         logger.info(f"Checking if all topics already exists")
         existing_topics: List[str] = [element.name.split("/")[3] for element in client.list_topics(project)]
@@ -85,6 +87,7 @@ class GCP(ProviderInterface):
         }
 
         topic_name: str = f"projects/{settings.GOOGLE_PROJECT_ID}/topics/{topic}"
+        # TODO: This is slow down the connection, must be a singletron
         client = pubsub_v1.PublisherClient(client_config=retry_settings, credentials=self.get_credentials())
         future = client.publish(topic_name, data, **attrs)
         logger.info(f"Futures: {future.result()}")
@@ -98,3 +101,6 @@ class GCP(ProviderInterface):
         )
 
         blob = storage.Blob(path, bucket).upload_from_file(file)
+
+    def get_template(self):
+        pass
