@@ -33,7 +33,7 @@ def custom_openapi(openapi_prefix: str):
     return app.openapi_schema
 
 
-app = FastAPI()
+app = FastAPI(redoc_url="/docs", docs_url=None)
 app.openapi = custom_openapi
 # oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
