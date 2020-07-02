@@ -1,21 +1,17 @@
-import base64
-import re
-import string
 from typing import List, Union, Dict, Tuple
 
-import boto3
-from structlog import get_logger
-
+from brandenburg.models.notify import NotifyModel
+from brandenburg.toolbox.logger import log
 from brokers.aws import AWSBroker
 from config import settings
 from providers.gcp import GCP
 
-logger = get_logger(__name__)
+logger = log.get_logger(__name__)
 
 
 class EmailService:
     @staticmethod
-    def run():
+    def execute(notify: NotifyModel):
         gcs = storage.Client(project=settings.GOOGLE_PROJECT_ID, credentials=GCP().get_credentials())
         kind, locale, template_name = "email", "pt_BR", "verification_code"
         template: str = f"{kind}/{locale}/{template_name}.html"
