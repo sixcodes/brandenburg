@@ -5,12 +5,16 @@ from ujson import dumps
 from brandenburg.config import settings
 from brandenburg.strategies import ProviderStrategy
 from brandenburg.toolbox.funcs import Funcs
+from brandenburg.toolbox.logger import log
+
+logger = log.get_logger(__name__)
 
 
 class PublisherService:
     @staticmethod
     async def publish(data: Dict[str, str], routing_key: str) -> bool:
         topic: str = f"{routing_key}_{settings.NAMESPACE}"
+        logger.info(f"sending messsage to topic: {topic}")
         published = ProviderStrategy(settings.PROVIDER).context_publish(topic, dumps(data).encode())
         return published
 
