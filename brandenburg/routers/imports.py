@@ -12,9 +12,7 @@ logger = log.get_logger(__name__)
 router = APIRouter()
 
 
-@router.post(
-    "/import/push/", status_code=201, responses={201: {"status": "OK", "message": "Batch Accepted!"}}
-)
+@router.post("/import/push/", status_code=201, responses={201: {"status": "OK", "message": "Batch Accepted!"}})
 async def import_push(batch: BatchModel, request: Request):
     logger.info(f"request: X, headers: {dict(request.headers)}, ip: {request.client.host}")
     result, processed = await BatchService.execute(batch, batch.service_id)

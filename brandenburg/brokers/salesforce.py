@@ -41,7 +41,7 @@ class SalesforceBroker(BrokerInterface):
         response = data_extension.post()
         logger.info(f"post_tatus: {str(response.status)}, code: {str(response.code)}, message: {str(response.message)}")
         logger.info("Results: " + str(response.results))
-        if int(response.status) == 200: # HTTPStatus.OK
+        if int(response.status) == 200:  # HTTPStatus.OK
             return True
         return False
 
