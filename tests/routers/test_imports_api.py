@@ -7,14 +7,14 @@ import ujson as json
 from brandenburg.config import settings
 
 DATA: Dict[str, str] = {
-    "service_id": "partner1",
+    "service_id": "sap",
     "table_name": "user",
     "data": [{"id": 1, "name": "Maria"}],
     "action": "upsert",
 }
 
 
-HEADERS: Dict[str, str] = {"Origin": "*/*", "Content-Type": "application/json"}
+HEADERS: Dict[str, str] = {"Origin": "*/*", "Content-Type": "application/json", "Authorization": "Basic QURNSU46eHl6"}
 
 
 def test_api_good_request(client):
@@ -25,6 +25,11 @@ def test_api_good_request(client):
 def test_api_get_400_with_wrong_data(client):
     res = client.post(f"/v1/import/push/", json={"a": 1}, headers=HEADERS)
     assert res.status_code == 422
+
+
+def test_api_get_401_without_auth(client):
+    res = client.post(f"/v1/import/push/", json={"a": 1})
+    assert res.status_code == 401
 
 
 @pytest.mark.xfail
@@ -41,7 +46,7 @@ def test_send_action_batch(client):
 
 
 @pytest.mark.xfail
-def test_shcema_mapping_without_key_names(client):
+def test_schema_mapping_without_key_names(client):
     pass
 
 
@@ -52,4 +57,22 @@ def test_send_empty_values(client):
 
 @pytest.mark.xfail
 def test_send_more_than_10k_records(client):
+    pass
+
+
+@pytest.mark.xfail
+def test_send_file_ok(client):
+    pass
+
+
+@pytest.mark.xfail
+def test_send_empty_file_param(client):
+    pass
+
+
+@pytest.mark.xfail
+def test_send_file_and_check_background_function(client):
+    """
+    Check if the files was uploaded
+    """
     pass

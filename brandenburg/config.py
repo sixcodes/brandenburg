@@ -1,8 +1,7 @@
 import os
-from functools import lru_cache
-from typing import List, Set
+from typing import List, Tuple
 
-from pydantic import BaseSettings, RedisDsn
+from pydantic import BaseSettings, RedisDsn, Json
 
 
 class Settings(BaseSettings):
@@ -12,16 +11,22 @@ class Settings(BaseSettings):
 
     DEBUG: bool = True
     PORT: str = "8000"
-    ACCESS_LOG: bool = False
+    LOG_LEVEL: str = "trace"  # [critical|error|warning|info|debug|trace]
     PROD: bool = False
     NAMESPACE: str = "dev"
 
-    ALLOWED_HOSTS: str = "*"
-    REDIS_URL: str = "redis://localhost:6379"
+    AUTH_USERS: List[List[str]] = [["ADMIN", "xyz"]]
+    BATCH_LIMIT: int = 1000
 
-    DEFAULT_LOCALE: str = "pt_BR"
+    ALLOWED_HOSTS: List[str] = ["*"]
+    REDIS_URL: str = "redis://localhost:6379"
+    REDIS_POOL_MIN_SIZE: int = 1
+    REDIS_POOL_MAX_SIZE: int = 20
+
+    DEFAULT_LOCALE: str = "pt-BR"
     PROVIDER: str = "gcp"  # Option: aws or gcp
-    TOPICS: str = "email,sms,whatsapp,salesforce,sap,import_push"
+    TOPICS: List[str] = ["email", "sms", "whatsapp", "salesforce", "sap"]
+    BUCKET_STAGE: str = ""
 
     # SALESFORCE
     SF_CLIENT_ID: str = ""
@@ -35,22 +40,22 @@ class Settings(BaseSettings):
     TWILIO_EDGE: str = ""
 
     # SENDGRID
-    # Mandrill
+    SENDGRID_USERNAME: str = ""
+    SENDGRID_PASSWORD: str = ""
+
+    # Mailgun
+    MAILGUN_USERNAME: str = ""
+    MAILGUN_PASSWORD: str = ""
 
     # GOOGLE
     GOOGLE_PROJECT_ID: str = ""
-    GOOGLE_CREDENTIALS: str = ""
+    GOOGLE_CREDENTIALS: Json = {}
     GOOGLE_TEMPLATE_BUCKET: str = ""
 
     # AWS
     AWS_SERVER_PUBLIC_KEY: str = ""
     AWS_SERVER_SECRET_KEY: str = ""
     AWS_REGION: str = "us-east-1"
-
-
-@lru_cache(512)
-def settings():
-    pass
 
 
 settings = Settings()
