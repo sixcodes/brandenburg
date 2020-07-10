@@ -7,12 +7,18 @@ from brandenburg.models.lead import LeadModel
 def test_good_data():
 
     lead = LeadModel(
-        name="Maria Silva", phone_number="55912345678", email="maria@gmail.com", is_term_accepted="True", origin="lpx"
+        name="Maria Silva",
+        phone_number="55912345678",
+        email="maria@gmail.com",
+        role="farmer",
+        is_term_accepted="True",
+        origin="lpx",
     )
     assert lead == {
         "name": "Maria Silva",
         "phone_number": "55912345678",
         "email": "maria@gmail.com",
+        "role": "farmer",
         "group": "A",
         "is_term_accepted": "True",
         "origin": "lpx",

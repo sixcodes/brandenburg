@@ -25,6 +25,7 @@ class LeadModel(BaseModel):
     group: str
     is_term_accepted: str
     origin: str
+    role: str = ""
     by: str = "salesforce"
 
     def __init__(self, name: str, phone_number: str, email: EmailStr, **data) -> None:
