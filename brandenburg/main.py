@@ -33,7 +33,7 @@ def custom_openapi(openapi_prefix: str):
     return app.openapi_schema
 
 
-app = FastAPI(redoc_url="/docs", docs_url=None)
+app = FastAPI(debug=settings.DEBUG, title="Brandenburg API", redoc_url="/docs", docs_url=None)
 app.openapi = custom_openapi
 # oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
@@ -44,13 +44,13 @@ def get_settings():
 
 
 # README: CORS configuration
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=settings.ALLOWED_HOSTS,
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.ALLOWED_HOSTS,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["*"],
+)
 
 
 app.include_router(leads.router, prefix="/v1", tags=["Leads"], responses={404: {"description": "Not found"}})
@@ -70,14 +70,6 @@ app.include_router(
     dependencies=[Depends(get_settings), Depends(get_fast_auth)],
     responses={404: {"description": "Not found"}},
 )
-
-# app.include_router(
-#     notify.router,
-#     prefix="/v1",
-#     tags=["notify"],
-#     dependencies=[Depends(get_fast_auth)],
-#     responses={404: {"description": "Not found"}},
-# )
 
 
 @app.on_event("startup")
