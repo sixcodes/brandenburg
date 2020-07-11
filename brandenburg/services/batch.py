@@ -20,11 +20,11 @@ class BatchService:
         return batch, True
 
     @staticmethod
-    async def upload(name: str, filename: str, file: bytes, hash: str):
+    async def upload(name: str, filename: str, file: bytes, hash: str, token: str):
         from io import StringIO
 
         path: str = f"{name}/{datetime.now().strftime('%Y/%m/%d')}"
-        logger.info(f"uploading file: {filename} to {path}")
+        logger.info(f"uploading file: {filename} with hash: {hash} to path {path}, token: {token}")
         await PublisherService.upload_file(f"{path}/{filename}", file)
         logger.info("uploading MD5SUM file")
         await PublisherService.upload_file(f"{path}/MD5SUM", StringIO(hash))
