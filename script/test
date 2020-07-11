@@ -1,1 +1,17 @@
 #!/bin/sh
+
+
+if [ `uname` = "Darwin" ]
+then
+    echo "installing dependncies for MacOS"
+    # check if has brew
+    # brew install redis-cli
+else
+    echo "installing dependecies for Debian like"
+    apt-get install redis-server
+fi
+
+
+redis-cli SET "ADMIN" "xyz"
+
+py.test -s -v --cov=./ --cov-report term-missing -v
