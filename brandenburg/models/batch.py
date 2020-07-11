@@ -3,7 +3,15 @@ from typing import Tuple, List, Dict, Union, Set, Optional
 
 from pydantic import BaseModel, Field, Json, validator, root_validator
 
-BATCH_LIMIT: int = 1000
+from brandenburg.config import settings
+
+BATCH_LIMIT: int = settings.BATCH_LIMIT
+
+
+class ImportResponse(BaseModel):
+    status: str = Field(..., title="Status of response", choices=(("ok", "error")))
+    message: str
+    token: str = Field(..., title="A token to authenticate/validate the request postpone")
 
 
 class SchemaMapping(BaseModel):
@@ -53,13 +61,13 @@ class BatchModel(BaseModel):
         **kwargs,
     ) -> None:
         """
-        :param service_id: 
+        :param service_id:
         :param table_name:
         :param action:
         :param sdc_sequence: An integer that tells the Import API the order in which data points in the request body should be
         considered for loading. This data will be stored in the destination table in the _sequence column.
         This API uses a Unix epoch (in milliseconds) as the value for this property.
-        Note: This value cannot exceed the maximum of 9223372036854775807. 
+        Note: This value cannot exceed the maximum of 9223372036854775807.
         """
         NOW: datetime = datetime.now()
         _sdc_received_at: str = NOW.strftime('%y-%m-%d %I:%M:%S')
