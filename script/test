@@ -5,13 +5,23 @@ if [ `uname` = "Darwin" ]
 then
     echo "installing dependncies for MacOS"
     # check if has brew
-    # brew install redis-cli
+    brew install redis-cli
 else
-    echo "installing dependecies for Debian like"
+    echo "installing dependencies for Debian like"
     apt-get install redis-server
 fi
 
-
+echo "Configuring user in redis to test"
 redis-cli SET "ADMIN" "xyz"
 
+echo "Checking imports"
+isort --check-only --recursive -j 4 --line-width 120 --use-parentheses --no-inline-sort --multi-line 3 --trailing-comma brandenburg tests
+
+echo "Checking code format"
+black -t py37 -v --line-length 120 --check --exclude node_modules/* .
+
+echo "Lint checking"
+mypy ./ --ignore-missing-imports
+
+echo "running test"
 py.test -s -v --cov=./ --cov-report term-missing -v

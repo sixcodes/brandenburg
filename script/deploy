@@ -1,0 +1,5 @@
+#!/bin/sh
+
+env=$1
+
+cat ${env}.env| awk '{print}' ORS=' ' | xargs heroku config:set -a brandenburg-${env}

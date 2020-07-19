@@ -1,1 +1,5 @@
 #!/bin/sh
+# source script/bootstrap
+docker-compose up -d
+
+uvicorn brandenburg.main:app --log-level trace --reload
