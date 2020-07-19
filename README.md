@@ -23,6 +23,7 @@
 ## DEV Mode
 
 `Important`:
+
     - This section is about [config](https://12factor.net/config)
     - This script has been tested on macOS and Linux(Debian like)
     - You could see all environment variables in [config.py](brandenburg/config.py)
@@ -56,7 +57,12 @@ script/server
 
 
 ### API on Heroku
+This script has a env name param to read the right env file and set all variable ons heroku
+deployment.
 
+```bash
+script/deploy stg
+```
 
 
 #### API Documentation
