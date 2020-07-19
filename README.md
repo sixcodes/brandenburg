@@ -1,26 +1,46 @@
 # Brandenburg
 
+## Concepts
 
-### Prepare your local environment
+`Important`: This project is following the [12factor.net](https://12factor.net/) principles
 
-If you have already [pipenv](https://docs.pipenv.org) installed go to the run command or then install pipenv as showed on docs.
 
-Then, install dev dependencies.
+## Dependencies API
+
+- Google Cloud Platform or AWS account 
+- [Docker](https://docs.docker.com/get-docker/) (Optional)
+- Python 3.7+ (pyenv)
+- Pip (Pipenv)
+
+### Optional (FaaS)
+- Twillio Account (SMS, Whatsapp)
+- Salesforce Marketing Cloud
+- Sendgrid (Email)
+- AWS (SES, SNS)
+- Zenvia (SMS, Whatsapp)
+
+
+# DEV Mode
+
+`Important`:
+    - This section is about [config](https://12factor.net/config)
+    - This scripts was tested on MacOS and Linux(Debian like)
+    - You could see all environment varibles in [config.py](brandenburg/config.py)
+ 
+
+Inside of the project run the following commands.
+This will check and install all dependencies as needed.
 
 ```
-    pipenv install --dev
+    script/bootstrap
 ```
 
-Inside of the project run the command to activate your environment
-
-```
-    pipenv shell
-```
+Copy `example.env` to `dev.env` and set the variables though.
 
 #### Running tests
 
 ```bash
-    pipenv run test
+    script/test
 ```
 
 
@@ -29,43 +49,35 @@ Inside of the project run the command to activate your environment
 ## API
 
 ````bash
-    python api.py
+    script/server
 ````
-
-
-#### Redis is the cache ;)
-
-However, if you want to access the API you can just run the docker command and the API and WORKER will be up and
-running in seconds. 
-
-```
-    docker-compose up -d
-```
-
 
 ### Deployment
 
-This app depends on some environment variables to run properly. 
-You could see all of them in [config.py](config.py)
+`Important`: This API is ready to deploy anywhere, however we are using heroku to do this job easily as posible.
+
+
+### API on heroku
+
 
 
 #### API Documentation
 
 ```
-    http://127.0.0.1:8000/swagger/
+    http://127.0.0.1:8000/docs/
 ```
 
 #### Make a resquest
-I have used [httpie](https://httpie.org/).
+I have used [httpie](https://httpie.org/) to do this job.
 
-Get token
+Getting a token
 
 ```bash
     http 127.0.0.1:8000/v1/leads/token/ 
 
 ```
 
-send to Salesforce Marketing cloud
+Sending to Salesforce Marketing cloud
 
 ```bash
     http POST 127.0.0.1:8000/v1/leads/16db0bd3-579a-4a61-80b7-99f798013ee2 name=anitta email=anitta2@agrorede1.com phone_number=11912341678
