@@ -91,7 +91,9 @@ celerybeat-schedule
 *.sage.py
 
 # Environments
-.env
+prod.env
+dev.env
+stg.env
 .venv
 env/
 venv/
@@ -121,7 +123,6 @@ dmypy.json
 **/.DS_Store
 .idea/*
 *.swn
-*.env
 
 # serverless
 .serverless/
