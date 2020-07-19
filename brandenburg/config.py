@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     PROD: bool = False
     NAMESPACE: str = "dev"
 
-    AUTH_USERS: List[List[str]] = [["ADMIN", "xyz"]]
+    AUTH_USERS: List[List[str]]
     BATCH_LIMIT: int = 1000
 
     ALLOWED_HOSTS: List[str] = ["*"]
@@ -25,7 +25,7 @@ class Settings(BaseSettings):
 
     DEFAULT_LOCALE: str = "pt-BR"
     PROVIDER: str = "gcp"  # Option: aws or gcp
-    TOPICS: List[str] = ["email", "sms", "whatsapp", "salesforce", "sap"]
+    TOPICS: List[str] = ["email", "sms", "whatsapp", "salesforce"]
     BUCKET_STAGE: str = ""
 
     # SALESFORCE
@@ -48,14 +48,17 @@ class Settings(BaseSettings):
     MAILGUN_PASSWORD: str = ""
 
     # GOOGLE
-    GOOGLE_PROJECT_ID: str = ""
-    GOOGLE_CREDENTIALS: Json = {}
-    GOOGLE_TEMPLATE_BUCKET: str = ""
+    GOOGLE_PROJECT_ID: str
+    GOOGLE_CREDENTIALS: Json
+    GOOGLE_TEMPLATE_BUCKET: str
 
     # AWS
     AWS_SERVER_PUBLIC_KEY: str = ""
     AWS_SERVER_SECRET_KEY: str = ""
     AWS_REGION: str = "us-east-1"
 
+    class Config:
+        env_file = 'dev.env'
+        env_file_encoding = 'utf-8'
 
 settings = Settings()
