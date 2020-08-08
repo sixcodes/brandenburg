@@ -52,6 +52,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+if settings.NAMESPACE.lower() == 'prod':
+    from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
+
+    app.add_middleware(HTTPSRedirectMiddleware)
 
 app.include_router(leads.router, prefix="/v1", tags=["Leads"], responses={404: {"description": "Not found"}})
 

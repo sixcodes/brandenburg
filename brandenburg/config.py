@@ -61,4 +61,5 @@ class Settings(BaseSettings):
         env_file = 'dev.env'
         env_file_encoding = 'utf-8'
 
+
 settings = Settings()
