@@ -8,13 +8,14 @@
 .idea
 *.md
 *.log
-*.tgz 
+*.tgz
 
 # files
 README.md
 docker-compose.yml
 
 # folders
+docs/
 dist/
 build/
 brandenburg.egg-info/
@@ -22,8 +23,8 @@ brandenburg.egg-info/
 .pytest_cache
 .circleci/
 .coverage
-out 
-**/out 
+out
+**/out
 .serverless
 tests/*
 test

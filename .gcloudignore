@@ -31,3 +31,50 @@ docker-compose.yml
 package*.json
 conftest.py
 .dockerignore
+# Extensions
+*.pyc
+/.git
+*.swp
+*.swo
+.DS_Store
+*.sqlite3
+.idea
+*.md
+*.log
+*.tgz
+
+# files
+README.md
+docker-compose.yml
+
+# folders
+docs/
+dist/
+build/
+brandenburg.egg-info/
+.mypy_cache/
+.pytest_cache
+.circleci/
+.coverage
+out
+**/out
+.serverless
+tests/*
+test
+*.*.*.test*
+.cache
+__pycache__
+
+# Packages
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+bin
+develop-eggs
+.installed.cfg
+
+# Installer logs
+pip-log.txt
