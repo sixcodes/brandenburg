@@ -7,7 +7,7 @@ import ujson as json
 from brandenburg.config import settings
 
 DATA: Dict[str, str] = {
-    "service_id": "sap",
+    "service_id": "salesforce",
     "table_name": "user",
     "data": [{"id": 1, "name": "Maria"}],
     "action": "upsert",

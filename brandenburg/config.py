@@ -15,10 +15,11 @@ class Settings(BaseSettings):
     PROD: bool = False
     NAMESPACE: str = "dev"
 
-    AUTH_USERS: List[List[str]]
+    AUTH_USERS: List[List[str]] = [["ADMIN", "xyz"]]
     BATCH_LIMIT: int = 1000
 
     ALLOWED_HOSTS: List[str] = ["*"]
+
     REDIS_URL: str = "redis://localhost:6379"
     REDIS_POOL_MIN_SIZE: int = 1
     REDIS_POOL_MAX_SIZE: int = 20
@@ -26,12 +27,14 @@ class Settings(BaseSettings):
     DEFAULT_LOCALE: str = "pt-BR"
     PROVIDER: str = "gcp"  # Option: aws or gcp
     TOPICS: List[str] = ["email", "sms", "whatsapp", "salesforce"]
-    BUCKET_STAGE: str = ""
+    # BUCKET_STAGE: str = ""
+    # TEMPLATE_BUCKET: str
 
     # SALESFORCE
     SF_CLIENT_ID: str = ""
     SF_ACCOUNT_ID: str = ""
     SF_CLIENT_SECRET: str = ""
+    SF_LEAD_CUSTOMER_KEY: str = ""
 
     # TWILIO
     TWILIO_ACCOUNT_SID: str = ""
@@ -42,15 +45,16 @@ class Settings(BaseSettings):
     # SENDGRID
     SENDGRID_USERNAME: str = ""
     SENDGRID_PASSWORD: str = ""
+    SENDGRID_HOST: str = "smtp.sendgrid.net"
+    SENDGRID_PORT: int = 587
 
     # Mailgun
     MAILGUN_USERNAME: str = ""
     MAILGUN_PASSWORD: str = ""
 
     # GOOGLE
-    GOOGLE_PROJECT_ID: str
+    GOOGLE_PROJECT_ID: str = ""
     GOOGLE_CREDENTIALS: Json
-    GOOGLE_TEMPLATE_BUCKET: str
 
     # AWS
     AWS_SERVER_PUBLIC_KEY: str = ""
