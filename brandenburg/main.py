@@ -4,7 +4,7 @@ from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 
-from brandenburg.auth import get_fast_auth, create_users
+from brandenburg.auth import get_fast_auth
 from brandenburg.config import settings
 from brandenburg.routers import imports, leads, notify
 from brandenburg.strategies import ProviderStrategy
@@ -84,7 +84,7 @@ async def startup_event():
         [f"{topic}_{settings.NAMESPACE}" for topic in settings.TOPICS]
     )
     logger.info("creating auth users")
-    await create_users()
+    # await create_users() # FIXME: remove it
 
 
 @app.on_event("shutdown")

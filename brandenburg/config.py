@@ -1,5 +1,5 @@
 import os
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 
 from pydantic import BaseSettings, RedisDsn, Json
 
@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     PROD: bool = False
     NAMESPACE: str = "dev"
 
-    AUTH_USERS: List[List[str]] = [["ADMIN", "xyz"]]
+    AUTH_USERS: Dict[str, str] = {"ADMIN": "xyz"}
     BATCH_LIMIT: int = 1000
 
     ALLOWED_HOSTS: List[str] = ["*"]
