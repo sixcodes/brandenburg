@@ -10,13 +10,14 @@ from brandenburg.toolbox.funcs import Funcs
 from brandenburg.toolbox.logger import log
 
 logger = log.get_logger(__name__)
-router = APIRouter()
+router: APIRouter = APIRouter()
 
 
 @router.post("/import/push/", status_code=201, responses={201: {"status": "OK", "message": "Batch Accepted!"}})
-async def import_push(batch: BatchModel, request: Request):
+async def import_push(batch: BatchModel, request: Request, background_tasks: BackgroundTasks):
     logger.info(f"request: X, headers: {dict(request.headers)}, ip: {request.client.host}")
-    result, processed = await BatchService.execute(batch, batch.service_id)
+    background_tasks.add_task(BatchService.execute, batch, batch.service_id)
+    logger.info(f"Was sent to worker the following data: {batch}")
     return UJSONResponse(status_code=status.HTTP_201_CREATED, content={"status": "OK", "message": "Batch Accepted!"})
 
 
