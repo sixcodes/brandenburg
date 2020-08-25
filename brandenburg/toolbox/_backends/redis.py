@@ -1,13 +1,11 @@
 import asyncio
-from typing import Tuple, Optional
+from typing import Tuple
 
 import aioredis
 from aioredis.errors import ReplyError
 
 from brandenburg.config import settings
 from brandenburg.toolbox.logger import log
-
-from .base import BaseBackend
 
 logger = log.get_logger(__name__)
 

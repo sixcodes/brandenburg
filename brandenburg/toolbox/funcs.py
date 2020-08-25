@@ -4,7 +4,6 @@ import uuid
 from typing import Union, Dict, Tuple
 
 import ujson as json
-from aioredis import Redis
 
 from brandenburg.config import settings
 from brandenburg.toolbox._backends.redis import RedisBackend
