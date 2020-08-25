@@ -1,5 +1,37 @@
 #!/bin/sh
+# Sample
+# script/deploy dev all
+# script/deploy dev heroku
+# script/deploy dev job salesforce
 
-env=$1
+ENV=$1
 
-cat ${env}.env| awk '{print}' ORS=' ' | xargs heroku config:set -a brandenburg-${env}
+
+
+
+function heroku(){
+
+
+    cat ${ENV}.env | awk '{print}' ORS=' ' | xargs heroku config:set -a brandenburg-${ENV}
+
+}
+
+function job(){
+    if [[ -z '$2' || -z '$3' ]]
+    then
+        echo "Missing arguments"
+        exit 1
+    fi
+    JOB=${2}_${ENV}
+    ENTRYPOINT=${2}
+    echo "Job -> ${JOB}, Entrypoint -> ${ENTRYPOINT}"
+    gcloud functions deploy ${JOB} --runtime python37 --trigger-topic ${JOB} --ingress-settings=internal-and-gclb \
+        --region=us-east1 --memory=128MB --stage-bucket=$FUNCTION_STAGE_BUCKET --entry-point=${ENTRYPOINT} \
+        --env-vars-file=${JOB}.yaml  --egress-settings=all \
+        --max-instances=1 --vpc-connector=brandenburg --timeout 60
+
+}
+
+echo $1 $2 $3
+
+job $2 $3
