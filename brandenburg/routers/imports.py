@@ -1,11 +1,8 @@
-from typing import Dict
-
 from fastapi import APIRouter, Request, status, UploadFile, File, BackgroundTasks
 from fastapi.responses import UJSONResponse
 
 from brandenburg.models.batch import BatchModel, ImportResponse
 from brandenburg.services.batch import BatchService
-from brandenburg.services.publisher import PublisherService
 from brandenburg.toolbox.funcs import Funcs
 from brandenburg.toolbox.logger import log
 

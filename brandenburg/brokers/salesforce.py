@@ -1,7 +1,6 @@
 from typing import List, Tuple, Dict, Union
 
 import ET_Client
-import ujson as json
 
 from brandenburg.config import settings
 from brandenburg.interfaces import BrokerInterface

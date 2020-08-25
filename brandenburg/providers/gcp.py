@@ -1,9 +1,7 @@
-import json
 from functools import lru_cache
-from typing import Tuple, List, Dict
+from typing import Tuple, List
 
 from google.cloud import pubsub_v1, storage
-from google.oauth2 import service_account
 from google.oauth2.service_account import Credentials
 from pydantic.types import Json
 

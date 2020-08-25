@@ -25,7 +25,7 @@ class BrokerInterface(metaclass=ABCMeta):
         self._succeeding = succeeding
 
     @abstractmethod
-    def handle(self) -> None:
+    def handle(self) -> bool:
         raise NotImplementedError("handle method is not implemented!")
 
 

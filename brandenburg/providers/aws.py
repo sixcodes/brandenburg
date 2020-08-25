@@ -1,7 +1,12 @@
 from typing import List
 
+import boto3
+
 from brandenburg.config import settings
 from brandenburg.interfaces import ProviderInterface
+from brandenburg.toolbox.logger import log
+
+logger = log.get_logger(__name__)
 
 
 class AWS(ProviderInterface):

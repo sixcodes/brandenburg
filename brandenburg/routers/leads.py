@@ -1,5 +1,3 @@
-from typing import Dict
-
 from fastapi import APIRouter, Request, status
 from fastapi.responses import UJSONResponse
 
