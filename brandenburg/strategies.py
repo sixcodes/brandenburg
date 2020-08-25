@@ -2,6 +2,9 @@ from typing import List
 
 from brandenburg.providers.aws import AWS
 from brandenburg.providers.gcp import GCP
+from brandenburg.toolbox.logger import log
+
+LOGGER = log.get_logger(__name__)
 
 
 class ProviderStrategy:
@@ -12,7 +15,7 @@ class ProviderStrategy:
         try:
             return {"gcp": GCP(), "aws": AWS()}.get(strategy.lower(), None)
         except AttributeError as ex:
-            logger.error(ex)
+            LOGGER.error(ex)
 
     def context_publish(self, topic: str, data: str, **attrs):
         self._strategy.publish(topic, data, **attrs)

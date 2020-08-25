@@ -14,7 +14,8 @@ class EmailService:
     def execute(notify: NotifyModel):
         gcs = storage.Client(project=settings.GOOGLE_PROJECT_ID, credentials=GCP().get_credentials())
         kind, locale, template_name = "email", "pt_BR", "verification_code"
-        template: str = f"{kind}/{locale}/{template_name}.html"
+        template: str = f"{kind}/{locale}/{template_name}.j2"
+        message: Dict[str, str] = {}
 
         file = gcs.get_bucket(settings.GOOGLE_TEMPLATE_BUCKET).get_blob(template).download_as_string()
         file.format()
