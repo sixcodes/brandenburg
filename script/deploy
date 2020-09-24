@@ -6,14 +6,8 @@
 
 ENV=$1
 
-
-
-
 function heroku(){
-
-
     cat ${ENV}.env | awk '{print}' ORS=' ' | xargs heroku config:set -a brandenburg-${ENV}
-
 }
 
 function job(){
@@ -25,7 +19,7 @@ function job(){
     JOB=${2}_${ENV}
     ENTRYPOINT=${2}
     echo "Job -> ${JOB}, Entrypoint -> ${ENTRYPOINT}"
-    gcloud functions deploy ${JOB} --runtime python37 --trigger-topic ${JOB} --ingress-settings=internal-and-gclb \
+    gcloud functions deploy ${JOB} --runtime python37 --trigger-topic ${JOB} --ingress-settings=internal-only \
         --region=us-east1 --memory=128MB --stage-bucket=$FUNCTION_STAGE_BUCKET --entry-point=${ENTRYPOINT} \
         --env-vars-file=${JOB}.yaml  --egress-settings=all \
         --max-instances=1 --vpc-connector=brandenburg --timeout 60
