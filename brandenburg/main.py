@@ -1,5 +1,6 @@
 from functools import lru_cache
 
+import uvicorn
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
@@ -94,3 +95,7 @@ async def shutdown_event():
     cache = await RedisBackend(settings.REDIS_URL).get_instance()
     await cache.disconnect()
     logger.debug("================>III Shutting down")
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)

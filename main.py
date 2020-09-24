@@ -1,10 +1,10 @@
-import base64
 from typing import Dict
 from brandenburg.services.marketing import MarketingService
 from google.cloud.functions.context import Context
+import time
 
 
-def salesforce(event: Dict[str, str], context: Context):
+def salesforce(event: Dict[str, str], context: Context) -> bool:
     """
     Args:
          event (dict):  The dictionary with data specific to this type of
@@ -23,7 +23,22 @@ def salesforce(event: Dict[str, str], context: Context):
     context.event_type 	The type of the event. For example: "google.pubsub.topic.publish".
     context.resource 	The resource that emitted the event.
     """
-    MarketingService.execute(event, context)
+    try:
+        print("###############################################")
+        # README: In Google cloud function the file system is Read-only, however FuelSDk try to download a WSDL file if
+        # it does't exists, this dowload is a temp workaround approach
+        import requests
+
+        wsdl = requests.get("https://webservice.exacttarget.com/etframework.wsdl")
+        with open("/tmp/ExactTargetWSDL.xml", "w") as f:
+            f.write(wsdl.text)
+
+        MarketingService.execute(event, context)
+    except Exception as ex:
+        print(f"Errorr: {ex}")
+        time.sleep(1)
+        raise ex
+    return True
 
 
 def sms(event, context):
