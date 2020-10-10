@@ -1,22 +1,25 @@
-from typing import Dict
+from typing import Dict, Union
 
 from google.cloud.functions.context import Context
 
-from brandenburg.brokers.salesforce import SalesforceBroker
+from brandenburg.brokers.salesforce import SalesforceTube
 from brandenburg.interfaces import ServiceInterface
 from brandenburg.toolbox.funcs import Funcs
 from brandenburg.toolbox.logger import log
 
-logger = log.get_logger(__name__)
+LOGGER = log.get_logger(__name__)
 
 
 class MarketingService(ServiceInterface):
     @staticmethod
     def execute(event: Dict[str, str], context: Context):
-        logger.info("Starting service")
-        data: Dict[str, str] = Funcs.decode(event.get("data"))
-        logger.info(f"Data received to send to SF: {data} ")
-        attrs: Dict[str, str] = event.get("attributes")
-        logger.info(f"Attributes: {attrs}")
-        sf: SalesforceBroker = SalesforceBroker()
+        """
+        TODO: rethink COntext direct from google when aws ?
+        """
+        LOGGER.info("Starting service")
+        data: Dict[str, str] = Funcs.decode(event.get("data", ""))
+        LOGGER.info(f"Data received: {data} ")
+        attrs: Union[Dict[str, str],str] = event.get("attributes", {})
+        LOGGER.info(f"Attributes: {attrs}")
+        sf: SalesforceTube = SalesforceTube()
         sf.handle(data)

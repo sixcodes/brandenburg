@@ -42,14 +42,17 @@ def salesforce(event: Dict[str, str], context: Context) -> bool:
 
 
 def sms(event, context):
+    # SMSService.execute(event, context)
     pass
 
 
 def email(event, context):
+    # EmailService.execute(event, context)
     pass
 
 
 def whatsapp(event, context):
+    # Whatsapp.execute(event, context)
     pass
 
 

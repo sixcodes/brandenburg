@@ -1,3 +1,7 @@
+from email import encoders
+from email.mime.base import MIMEBase
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from typing import List, Union, Dict, Tuple
 
 from brandenburg.models.notify import NotifyModel
@@ -10,6 +14,21 @@ logger = log.get_logger(__name__)
 
 
 class EmailService:
+    # TODO: Move this method to a Email object
+    def prepare():
+        msg = MIMEMultipart()
+        msg['From'] = fromaddr
+        msg['To'] = toaddr
+        msg['Subject'] = " SUBJECT OF THE MAIL"
+        body = " Main body of the mail"
+        msg.attach(MIMEText(body, 'plain'))
+
+    def get_template():
+        pass
+
+    def format():
+        pass
+
     @staticmethod
     def execute(notify: NotifyModel):
         gcs = storage.Client(project=settings.GOOGLE_PROJECT_ID, credentials=GCP().get_credentials())
