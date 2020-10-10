@@ -7,6 +7,14 @@ def test_encode_string():
     assert "YnJhbmRlbmJ1cmc=" == Funcs.encode("brandenburg")
 
 
+def test_encode_empty_string():
+    assert "" == Funcs.encode("")
+
+
+def test_encode_int():
+    assert "MTIzNA==" == Funcs.encode("1234")
+
+
 def test_encode_dict():
     assert "eyJhcHAiOiJicmFuZGVuYnVyZyJ9" == Funcs.encode({"app": "brandenburg"})
 
