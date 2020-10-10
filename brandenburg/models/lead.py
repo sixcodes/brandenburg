@@ -51,7 +51,7 @@ class LeadModel(BaseModel):
         return value
 
     def __get_group(self, email) -> str:
-        providers: List[str] = (
+        providers: List[str] = [
             "gmail.com",
             "g1.com",
             "hotmail.com",
@@ -79,7 +79,7 @@ class LeadModel(BaseModel):
             "gmx.com",
             "gmx.us",
             "zohomail.eu",
-        )
+        ]
         for item in providers:
             if email.find(item) > 0:
                 return "A"

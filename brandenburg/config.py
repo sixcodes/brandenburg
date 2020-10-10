@@ -60,6 +60,9 @@ class Settings(BaseSettings):
     AWS_SERVER_PUBLIC_KEY: str = ""
     AWS_SERVER_SECRET_KEY: str = ""
     AWS_REGION: str = "us-east-1"
+    AWS_SMTP_USER: str = ""
+    AWS_SMTP_PASSWORD: str = ""
+    AWS_SMTP_HOST: str = ""
 
     class Config:
         env_file = 'dev.env'

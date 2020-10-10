@@ -23,7 +23,7 @@ async def get_fast_auth(
     By using the secrets.compare_digest() it will be secure against a type of attacks called "timing attacks".
     """
     username: str = credentials.username.upper()
-    password: Optional[str] = settings.AUTH_USERS.get(username)
+    password: str = settings.AUTH_USERS.get(username, "")
     correct_username = secrets.compare_digest(credentials.username, username)
     correct_password = secrets.compare_digest(credentials.password, password)
     if not (correct_username and correct_password):

@@ -44,7 +44,7 @@ class Funcs:
         if isinstance(data, dict):
             return base64.b64encode(json.dumps(data).encode()).decode()
         else:
-            return base64.b64encode(data.encode()).decode()
+            return base64.b64encode(str(data).encode()).decode()
 
     @staticmethod
     def decode(data: str) -> Union[Dict[str, str], int, str]:
