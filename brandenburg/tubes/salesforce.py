@@ -3,13 +3,13 @@ from typing import List, Tuple, Dict, Union
 import ET_Client
 
 from brandenburg.config import settings
-from brandenburg.interfaces import BrokerInterface
+from brandenburg.interfaces import TubeInterface
 from brandenburg.toolbox.logger import log
 
 logger = log.get_logger(__name__)
 
 
-class SalesforceBroker(BrokerInterface):
+class SalesforceTube(TubeInterface):
     def get_client(self):
         client: ET_Client = ET_Client.ET_Client(
             False,

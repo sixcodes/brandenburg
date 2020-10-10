@@ -1,9 +1,9 @@
 from brandenburg.config import settings
-from brandenburg.interfaces import BrokerInterface
+from brandenburg.interfaces import TubeInterface
 from brandenburg.toolbox.logger import log
 
 LOGGER = log.get_logger(__name__)
 
 
-class EmailBroker(BrokerInterface):
+class AWSTube(TubeInterface):
     pass
