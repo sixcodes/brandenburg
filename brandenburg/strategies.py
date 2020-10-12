@@ -17,7 +17,7 @@ class ProviderStrategy:
         except AttributeError as ex:
             LOGGER.error(ex)
 
-    def context_publish(self, topic: str, data: str, **attrs):
+    def context_publish(self, topic: str, data: bytes, **attrs):
         self._strategy.publish(topic, data, **attrs)
 
     def context_create_topics(self, topics: List[str]):

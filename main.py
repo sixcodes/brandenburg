@@ -24,7 +24,6 @@ def salesforce(event: Dict[str, str], context: Context) -> bool:
     context.resource 	The resource that emitted the event.
     """
     try:
-        print("###############################################")
         # README: In Google cloud function the file system is Read-only, however FuelSDk try to download a WSDL file if
         # it does't exists, this dowload is a temp workaround approach
         import requests
@@ -32,12 +31,10 @@ def salesforce(event: Dict[str, str], context: Context) -> bool:
         wsdl = requests.get("https://webservice.exacttarget.com/etframework.wsdl")
         with open("/tmp/ExactTargetWSDL.xml", "w") as f:
             f.write(wsdl.text)
-
         MarketingService.execute(event, context)
     except Exception as ex:
         print(f"Errorr: {ex}")
-        time.sleep(1)
-        raise ex
+        return False
     return True
 
 

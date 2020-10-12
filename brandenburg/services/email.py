@@ -15,7 +15,7 @@ logger = log.get_logger(__name__)
 
 class EmailService:
     # TODO: Move this method to a Email object
-    def prepare():
+    def prepare(self):
         msg = MIMEMultipart()
         msg['From'] = fromaddr
         msg['To'] = toaddr
@@ -23,10 +23,10 @@ class EmailService:
         body = " Main body of the mail"
         msg.attach(MIMEText(body, 'plain'))
 
-    def get_template():
+    def get_template(self):
         pass
 
-    def format():
+    def format(self):
         pass
 
     @staticmethod
