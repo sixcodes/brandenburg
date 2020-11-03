@@ -1,5 +1,5 @@
 import asyncio
-from typing import Tuple
+from typing import Tuple, Optional
 
 import aioredis
 from aioredis.errors import ReplyError
@@ -20,16 +20,15 @@ class RedisBackend:
         RedisBackend.__instance.conn = None
         return RedisBackend.__instance
 
-    @staticmethod
-    async def get_instance() -> aioredis.commands.Redis:
+    async def get_instance(self) -> aioredis.commands.Redis:
         """
         Returns a lazily-cached redis conn for the instance's.
         """
-        _conn = RedisBackend.__instance.conn
+        _conn = self.__instance.conn
         if _conn is None:
-            _conn = await RedisBackend.__instance._get_new_conn()
-            RedisBackend.__instance.conn = _conn
-        return RedisBackend.__instance
+            _conn = await self.__instance._get_new_conn()
+            self.__instance.conn = _conn
+        return self.__instance
 
     @classmethod
     async def _get_new_conn(cls) -> None:
@@ -39,13 +38,18 @@ class RedisBackend:
         )
 
     @classmethod
-    async def disconnect(cls) -> None:
+    async def __disconnect(cls) -> None:
+        """
+        aioredis.commands.ContextRedis
+        """
+
         with await cls.__instance.conn as cache:
-            await cache.clear()
-            await cache.wait_close()
+            logger.debug(f">>>>>>>>>>>>>>>>>. {type(cache)}")
+            cache.close()
+            await cache.wait_closed()
 
     @classmethod
-    async def set_cache(cls, key: str, value: str = "x", ttl: int = 3600) -> bool:
+    async def set_cache(cls, key: str, value: str = "x", ttl: int = 600) -> Optional[bool]:
         try:
             with await cls.__instance.conn as cache:
                 await cache.set(key, value)
@@ -57,10 +61,11 @@ class RedisBackend:
         return False
 
     @classmethod
-    async def is_valid_token(cls, token: str) -> bool:
+    async def is_valid_token(cls, token: str) -> Optional[bool]:
         try:
             with await cls.__instance.conn as cache:
                 exists: str = await cache.exists(token)
+                await cls.__disconnect()
             if exists:
                 return True
         except ReplyError as ex:
