@@ -54,6 +54,7 @@ class RedisBackend:
             with await cls.__instance.conn as cache:
                 await cache.set(key, value)
                 await cache.expire(key, ttl)
+                await cls.__disconnect()
             logger.info(f"Configuring cache for key: {key}")
             return True
         except ReplyError as ex:
@@ -90,6 +91,7 @@ class RedisBackend:
 
         with await cls.__instance.conn as cache:
             value: bytes = await cache.get(key)
+            await cls.__disconnect()
         if value:
             return value.decode()
         return ""
