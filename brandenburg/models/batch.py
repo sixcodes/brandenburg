@@ -38,7 +38,7 @@ class BatchModel(BaseModel):
         ...,
         title="""The name of the destination table the data is being pushed to. Table names must be unique in each destination schema, or loading issues will occur. A single request can push data to multiple tables.""",
     )
-    data: List[Dict[str, Union[str, float, datetime, int, bool]]] = Field(
+    data: List[Dict[str, Union[str, float, datetime, int, bool, None]]] = Field(
         ...,
         title="""An object representing a record to be pushed into the destination table.""",
         min_items=1,
