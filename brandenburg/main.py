@@ -3,7 +3,6 @@ from functools import lru_cache
 import uvicorn
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.openapi.utils import get_openapi
 
 from brandenburg.auth import get_fast_auth
 from brandenburg.config import settings
@@ -17,25 +16,27 @@ from brandenburg.toolbox.logger import log
 logger = log.get_logger(__name__)
 
 
-def custom_openapi(openapi_prefix: str):
-    if app.openapi_schema:
-        return app.openapi_schema
-    openapi_schema = get_openapi(
-        title="Brandenburg Tor API",
-        version="0.1.0",
-        description="This is ",
-        routes=app.routes,
-        openapi_prefix=openapi_prefix,
-    )
-    # openapi_schema["info"]["x-logo"] = {
-    #     "url": ".png"
-    # }
-    app.openapi_schema = openapi_schema
-    return app.openapi_schema
+tags_metadata = [
+    {
+        "name": "leads",
+        "description": "Service to collect leads through our landing pages then it should be used in the marketing campaigns.",
+    },
+    {"name": "import", "description": "Service to import data in lambda architecture."},
+    {"name": "notify", "description": "Service to notify client using email, whatsapp or sms."},
+]
 
 
-app = FastAPI(debug=settings.DEBUG, title="Brandenburg API", redoc_url="/docs", docs_url=None)
-app.openapi = custom_openapi
+app = FastAPI(
+    debug=settings.DEBUG,
+    title="Brandenburg API",
+    version="0.1.0",
+    description="""This is a message hub that allows decoupling your messages using a streaming approach.
+    It is a simple API restful that receives your message then it uses serverless to connect to a service
+    to process your message in an async approach. These connectors we called tubes.""",
+    redoc_url="/docs",
+    docs_url=None,
+)
+app.openapi_tags = tags_metadata
 # oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
 
@@ -50,20 +51,20 @@ app.add_middleware(
     allow_origins=settings.ALLOWED_HOSTS,
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS"],
-    allow_headers=["*"],
+    allow_headers=["*"],  # TODO: set the correctness headers only
 )
 
-if settings.NAMESPACE.lower() == 'prod':
+if settings.NAMESPACE.lower() in ("stg", 'prod'):
     from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 
     app.add_middleware(HTTPSRedirectMiddleware)
 
-app.include_router(leads.router, prefix="/v1", tags=["Leads"], responses={404: {"description": "Not found"}})
+app.include_router(leads.router, prefix="/v1", tags=["leads"], responses={404: {"description": "Not found"}})
 
 app.include_router(
     imports.router,
     prefix="/v1",
-    tags=["Import"],
+    tags=["import"],
     dependencies=[Depends(get_settings), Depends(get_fast_auth)],
     responses={404: {"description": "Not found"}},
 )
@@ -71,7 +72,7 @@ app.include_router(
 app.include_router(
     notify.router,
     prefix="/v1",
-    tags=["Notify"],
+    tags=["notify"],
     dependencies=[Depends(get_settings), Depends(get_fast_auth)],
     responses={404: {"description": "Not found"}},
 )

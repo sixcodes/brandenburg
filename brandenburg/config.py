@@ -26,7 +26,7 @@ class Settings(BaseSettings):
 
     DEFAULT_LOCALE: str = "pt-BR"
     PROVIDER: str = "gcp"  # Option: aws or gcp
-    TOPICS: List[str] = ["email", "sms", "whatsapp", "salesforce"]
+    TOPICS: List[str] = ["email", "sms", "whatsapp", "salesforce", "test_brandenburg"]
     BUCKET_STAGE: str = ""
     TEMPLATE_BUCKET: str = ""
 

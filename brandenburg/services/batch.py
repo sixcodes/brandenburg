@@ -1,4 +1,5 @@
 from datetime import datetime
+from io import StringIO
 from typing import Tuple
 
 from brandenburg.models.batch import BatchModel
@@ -18,7 +19,6 @@ class BatchService:
 
     @staticmethod
     async def upload(name: str, filename: str, file: bytes, hash: str, token: str):
-        from io import StringIO
 
         path: str = f"{name}/{datetime.now().strftime('%Y/%m/%d')}"
         logger.info(f"uploading file: {filename} with hash: {hash} to path {path}, token: {token}")
