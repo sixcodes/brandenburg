@@ -33,6 +33,19 @@ def test_missing_data_field():
     ]
 
 
+def test_batch_with_schema_mapping():
+    params = copy.deepcopy(BATCH)
+    params["action"] = "batch"
+    params["key_names"] = ["Id"]
+    params["schema_mapping"] = [
+        {"type": "TIMESTAMP", "name": "LastUpdateDate", "is_nullable": "true"},
+        {"type": "INTEGER", "name": "Id", "is_nullable": "true"},
+        {"type": "STRING", "name": "Reason", "is_nullable": "true"},
+    ]
+    batch: BatchModel = BatchModel(**params)
+    assert len(batch.schema_mapping) == 3
+
+
 def test_batch_missing_schema():
     bad_batch = copy.deepcopy(BATCH)
     bad_batch["action"] = "batch"
