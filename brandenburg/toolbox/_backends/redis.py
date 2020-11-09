@@ -44,8 +44,8 @@ class RedisBackend:
         """
 
         with await cls.__instance.conn as cache:
-            logger.debug(f">>>>>>>>>>>>>>>>>. {type(cache)}")
             cache.close()
+            logger.info("Closing redis connection {cache}")
             await cache.wait_closed()
 
     @classmethod
@@ -66,6 +66,7 @@ class RedisBackend:
         try:
             with await cls.__instance.conn as cache:
                 exists: str = await cache.exists(token)
+                logger.info("Disconnecting from redis cluster")
                 await cls.__disconnect()
             if exists:
                 return True
