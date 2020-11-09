@@ -16,10 +16,10 @@ BATCH = {
 
 def test_good_data():
     batch: BatchModel = BatchModel(**BATCH)
-    assert isinstance(batch.sdc_sequence, int) == True
-    assert batch.sdc_received_at is not None
+    assert batch._sdc_received_at is not None
+    assert isinstance(batch._sdc_sequence, int) is True
     assert len(batch.key_names) == 0
-    assert len(batch.schema_mapping) == 0
+    assert batch.schema_mapping is None
 
 
 def test_missing_data_field():

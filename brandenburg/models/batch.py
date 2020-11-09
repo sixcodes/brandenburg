@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Tuple, List, Dict, Union, Set, Optional
 
-from pydantic import BaseModel, Field, Json, validator, root_validator
+from pydantic import BaseModel, PrivateAttr, Field, Json, validator, root_validator
 
 from brandenburg.config import settings
 
@@ -24,9 +24,9 @@ class SchemaMapping(BaseModel):
         {"type": "STRING", "name": "document_number", "is_nullable": true}
     """
 
-    type: str = Field(title="Column data type", default="")
-    name: str = Field(title="Name", default="")
-    is_nullable: bool = Field(title="If the field can be NULL", default=True)
+    type: str = Field(title="Column data type. E.g: numeric, decimal, float, varchar, date")
+    name: str = Field(title="Column Name on the database")
+    is_nullable: bool = Field(title="If the column can be NULL", default=True)
 
 
 class BatchModel(BaseModel):
@@ -44,22 +44,15 @@ class BatchModel(BaseModel):
         min_items=1,
         max_items=BATCH_LIMIT,
     )
-    sdc_received_at: Optional[str]
-    sdc_sequence: Optional[int]
     key_names: Optional[List[str]] = Field(
         list(), title="""An array of strings representing the Primary Key fields in the destination table."""
     )
-    schema_mapping: Optional[List[SchemaMapping]] = Field(list(), title="""The table schema""")
-    action: str = Field(..., title="This will always be upsert.", choices=(("upsert", "batch")))
+    schema_mapping: Optional[List[SchemaMapping]]  # = Field(list({}), title="""The table schema""")
+    action: str = Field(title="This will always be upsert.", choices=(("upsert", "batch")), default="upsert")
+    _sdc_received_at: str = PrivateAttr()
+    _sdc_sequence: int = PrivateAttr()
 
-    def __init__(
-        self,
-        service_id: str,
-        table_name: str,
-        action: str,
-        data: List[Dict[str, Union[str, float, datetime, int, bool]]],
-        **kwargs,
-    ) -> None:
+    def __init__(self, **kwargs) -> None:
         """
         :param service_id:
         :param table_name:
@@ -69,18 +62,11 @@ class BatchModel(BaseModel):
         This API uses a Unix epoch (in milliseconds) as the value for this property.
         Note: This value cannot exceed the maximum of 9223372036854775807.
         """
+        # import ipdb; ipdb.set_trace()
+        super().__init__(**kwargs)
         NOW: datetime = datetime.now()
-        _sdc_received_at: str = NOW.strftime('%y-%m-%d %I:%M:%S')
-        _sdc_sequence: int = int(NOW.timestamp())
-        super().__init__(
-            service_id=service_id,
-            table_name=table_name,
-            action=action,
-            data=data,
-            sdc_sequence=_sdc_sequence,
-            sdc_received_at=_sdc_received_at,
-            **kwargs,
-        )
+        self._sdc_received_at = NOW.strftime('%y-%m-%d %I:%M:%S')
+        self._sdc_sequence = int(NOW.timestamp())
 
     @validator("data", pre=True)
     def data_validator(cls, value):
@@ -93,11 +79,10 @@ class BatchModel(BaseModel):
             raise ValueError("Field data cannot be empty.")
         return value
 
-    @validator("action")
+    @validator("action", always=True)
     def action_validator(cls, value, values):
         if value == "batch":
-            # import ipdb; ipdb.set_trace()
-            if not len(values["schema_mapping"]) or not len(values["key_names"]):
+            if not values["schema_mapping"] or not len(values["key_names"]):
                 raise ValueError("Fields schema_mapping and key_names cannot be empty when action is batch")
 
     # @validator("key_names", pre=True, always=True)
