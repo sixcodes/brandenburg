@@ -43,10 +43,9 @@ class RedisBackend:
         aioredis.commands.ContextRedis
         """
 
-        with await cls.__instance.conn as cache:
-            cache.close()
-            logger.info("Closing redis connection {cache}")
-            await cache.wait_closed()
+        cls.__instance.conn.close()
+        logger.info("Closing redis connection")
+        await cls.__instance.conn.wait_closed()
 
     @classmethod
     async def set_cache(cls, key: str, value: str = "x", ttl: int = 600) -> Optional[bool]:
