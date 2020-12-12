@@ -2,7 +2,7 @@ import asyncio
 from typing import Tuple, Optional
 
 import aioredis
-from aioredis.errors import ReplyError
+from aioredis.errors import ReplyError, ConnectionForcedCloseError
 
 from brandenburg.config import settings
 from brandenburg.toolbox.logger import log
@@ -42,10 +42,12 @@ class RedisBackend:
         """
         aioredis.commands.ContextRedis
         """
-
-        cls.__instance.conn.close()
-        logger.info("Closing redis connection")
-        await cls.__instance.conn.wait_closed()
+        try:
+            cls.__instance.conn.close()
+            logger.info("Closing redis connection")
+            await cls.__instance.conn.wait_closed()
+        except ConnectionForcedCloseError as ex:
+            logger.error(ex)
 
     @classmethod
     async def set_cache(cls, key: str, value: str = "x", ttl: int = 600) -> Optional[bool]:
