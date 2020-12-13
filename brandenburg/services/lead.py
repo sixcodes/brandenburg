@@ -1,11 +1,11 @@
-import asyncio
-import json
-import pickle
-import uuid
+# Standard library imports
+import asyncio  # pragma: nocover
 from typing import List, Tuple, Dict, Union
 
+# Third party imports
 from pydantic import ValidationError
 
+# Local application imports
 from brandenburg.config import settings
 from brandenburg.models.lead import LeadModel
 from brandenburg.services.publisher import PublisherService
@@ -26,4 +26,7 @@ class LeadService:
             res = await PublisherService.publish(lead.dict(), lead.by)
             logger.info(f"sent_to_queue: {bool(res)}, lead: {lead}")
             return lead.dict(), True
-        return {"status": "error", "message": f"Token {token} is invalid"}, False
+        return (
+            {"status": "error", "message": f"Token {token} is invalid"},
+            False,
+        )

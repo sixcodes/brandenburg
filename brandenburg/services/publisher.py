@@ -1,7 +1,10 @@
+# Standard library imports
 from typing import Dict
 
+# Third party imports
 from ujson import dumps
 
+# Local application imports
 from brandenburg.config import settings
 from brandenburg.strategies import ProviderStrategy
 from brandenburg.toolbox.logger import log

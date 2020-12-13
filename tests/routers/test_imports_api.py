@@ -1,9 +1,12 @@
+# Standard library imports
 import copy
 from typing import Dict
 
+# Third party imports
 import pytest
 import ujson as json
 
+# Local application imports
 from brandenburg.config import settings
 
 DATA: Dict[str, str] = {
@@ -14,7 +17,11 @@ DATA: Dict[str, str] = {
 }
 
 
-HEADERS: Dict[str, str] = {"Origin": "*/*", "Content-Type": "application/json", "Authorization": "Basic QURNSU46eHl6"}
+HEADERS: Dict[str, str] = {
+    "Origin": "*/*",
+    "Content-Type": "application/json",
+    "Authorization": "Basic QURNSU46eHl6",
+}
 
 
 def test_api_good_request(client):

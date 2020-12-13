@@ -1,11 +1,5 @@
-import asyncio
-import json
-
-import aioredis
+# Third party imports
 import pytest
-from pydantic import ValidationError
-
-from brandenburg.config import settings
 
 LEAD = {
     "name": "Maria Silva",

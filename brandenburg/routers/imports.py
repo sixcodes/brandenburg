@@ -1,6 +1,8 @@
+# Third party imports
 from fastapi import APIRouter, Request, status, UploadFile, File, BackgroundTasks
 from fastapi.responses import UJSONResponse
 
+# Local application imports
 from brandenburg.models.batch import BatchModel, ImportResponse
 from brandenburg.services.batch import BatchService
 from brandenburg.toolbox.funcs import Funcs
@@ -10,7 +12,9 @@ logger = log.get_logger(__name__)
 router: APIRouter = APIRouter()
 
 
-@router.post("/import/push/", status_code=201, responses={201: {"status": "OK", "message": "Batch Accepted!"}})
+@router.post(
+    "/import/push/", status_code=201, responses={201: {"status": "OK", "message": "Batch Accepted!"}},
+)
 async def import_push(batch: BatchModel, request: Request, background_tasks: BackgroundTasks):
     """
     Pushes a record or multiple records for a specified table to the lake.
@@ -22,7 +26,7 @@ async def import_push(batch: BatchModel, request: Request, background_tasks: Bac
     logger.info(f"request: X, headers: {dict(request.headers)}, ip: {request.client.host}")
     background_tasks.add_task(BatchService.execute, batch, batch.service_id)
     logger.info(f"Was sent to worker the following data: {batch}")
-    return UJSONResponse(status_code=status.HTTP_201_CREATED, content={"status": "OK", "message": "Batch Accepted!"})
+    return UJSONResponse(status_code=status.HTTP_201_CREATED, content={"status": "OK", "message": "Batch Accepted!"},)
 
 
 @router.post("/import/batch/", response_model=ImportResponse, status_code=201)
@@ -37,7 +41,7 @@ async def import_batch(batch: BatchModel, request: Request):
     """
     logger.info(f"request: X, headers: {dict(request.headers)}, ip: {request.client.host}")
     result, processed = await BatchService.execute(batch, batch.service_id, "batch")
-    return UJSONResponse(status_code=status.HTTP_201_CREATED, content={"status": "OK", "message": "Batch Accepted!"})
+    return UJSONResponse(status_code=status.HTTP_201_CREATED, content={"status": "OK", "message": "Batch Accepted!"},)
 
 
 @router.post(
@@ -46,7 +50,9 @@ async def import_batch(batch: BatchModel, request: Request):
     status_code=202,
     responses={202: {"status": "ok", "message": "File accepted", "token": "string"}},
 )
-async def import_file(name: str, md5sum: str, background_tasks: BackgroundTasks, file: UploadFile = File(...)):
+async def import_file(
+    name: str, md5sum: str, background_tasks: BackgroundTasks, file: UploadFile = File(...),
+):
     """
     This is a file importer to be validate postpone or just saved.
     """
@@ -55,5 +61,5 @@ async def import_file(name: str, md5sum: str, background_tasks: BackgroundTasks,
     # TODO: Create a hash from hash parameter and return it to be checked from requested
     logger.info(f"File was sent to background task, with token{token}")
     return UJSONResponse(
-        status_code=status.HTTP_202_ACCEPTED, content={"status": "ok", "message": "File accepted", "token": token}
+        status_code=status.HTTP_202_ACCEPTED, content={"status": "ok", "message": "File accepted", "token": token},
     )

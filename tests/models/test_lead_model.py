@@ -1,6 +1,8 @@
+# Third party imports
 import pytest
 from pydantic import ValidationError
 
+# Local application imports
 from brandenburg.models.lead import LeadModel
 
 
@@ -28,14 +30,14 @@ def test_good_data():
 
 def test_with_group_A():
     lead = LeadModel(
-        name="Maria Silva", phone_number="55912345678", email="maria@gmail.com", is_term_accepted="True", origin="lpx"
+        name="Maria Silva", phone_number="55912345678", email="maria@gmail.com", is_term_accepted="True", origin="lpx",
     )
     assert lead.group == "A"
 
 
 def test_with_group_A_yahoo():
     lead = LeadModel(
-        name="Maria Silva", phone_number="55912345678", email="maria@yahoo.it", is_term_accepted="True", origin="lpx"
+        name="Maria Silva", phone_number="55912345678", email="maria@yahoo.it", is_term_accepted="True", origin="lpx",
     )
     assert lead.group == "A"
 
@@ -53,12 +55,16 @@ def test_with_group_B():
 
 def test_raise_error_with_wrong_name():
     with pytest.raises(ValidationError) as ex:
-        LeadModel(name="M", phone_number="55912345678", email="maria@apolloagricola.com.br")
+        LeadModel(
+            name="M", phone_number="55912345678", email="maria@apolloagricola.com.br",
+        )
 
 
 def test_raise_error_with_short_phone_number():
     with pytest.raises(ValidationError) as ex:
-        LeadModel(name="Maria Silva", phone_number="345678", email="maria@apolloagricola.com.br")
+        LeadModel(
+            name="Maria Silva", phone_number="345678", email="maria@apolloagricola.com.br",
+        )
 
 
 def test_raise_error_with_wrong_email():
@@ -68,4 +74,6 @@ def test_raise_error_with_wrong_email():
 
 def test_raise_error_with_letter_in_phone_number():
     with pytest.raises(ValidationError) as ex:
-        LeadModel(name="Maria Silva", phone_number="aa912345678", email="maria@yahoo.com")
+        LeadModel(
+            name="Maria Silva", phone_number="aa912345678", email="maria@yahoo.com",
+        )

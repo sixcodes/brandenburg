@@ -1,5 +1,7 @@
+# Standard library imports
 from typing import List
 
+# Local application imports
 from brandenburg.providers.aws import AWS
 from brandenburg.providers.gcp import GCP
 from brandenburg.toolbox.logger import log
@@ -9,15 +11,15 @@ LOGGER = log.get_logger(__name__)
 
 class ProviderStrategy:
     def __init__(self, strategy: str) -> None:
-        self._strategy = self.__factory(strategy)
+        self._strategy = self.__factory(strategy)()
 
     def __factory(self, strategy):
         try:
-            return {"gcp": GCP(), "aws": AWS()}.get(strategy.lower(), None)
+            return {"gcp": GCP, "aws": AWS}.get(strategy.lower(), None)
         except AttributeError as ex:
             LOGGER.error(ex)
 
-    def context_publish(self, topic: str, data: str, **attrs):
+    def context_publish(self, topic: str, data: bytes, **attrs):
         self._strategy.publish(topic, data, **attrs)
 
     def context_create_topics(self, topics: List[str]):

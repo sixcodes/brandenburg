@@ -1,10 +1,13 @@
+# Standard library imports
 import copy
 from typing import Dict, Collection
 
+# Third party imports
 import pytest
 import ujson as json
 from pydantic import EmailStr, ValidationError
 
+# Local application imports
 from brandenburg.models.notify import NotifyModel
 
 NOTIFY: Dict[str, Collection[str]] = {
@@ -32,7 +35,7 @@ def test_missing_contact():
     with pytest.raises(ValidationError) as info:
         notify: NotifyModel = NotifyModel(**bad_notify)
     assert json.loads(info.value.json()) == [
-        {'loc': ['contact'], 'msg': 'field required', 'type': 'value_error.missing'}
+        {"loc": ["contact"], "msg": "field required", "type": "value_error.missing",}
     ]
 
 
@@ -43,10 +46,10 @@ def test_with_wrong_by_option():
         notify: NotifyModel = NotifyModel(**bad_notify)
     assert json.loads(info.value.json()) == [
         {
-            'loc': ['by'],
-            'msg': "value is not a valid enumeration member; permitted: 'sms', 'whatsapp', 'email'",
-            'type': 'type_error.enum',
-            'ctx': {'enum_values': ['sms', 'whatsapp', 'email']},
+            "loc": ["by"],
+            "msg": "value is not a valid enumeration member; permitted: 'sms', 'whatsapp', 'email'",
+            "type": "type_error.enum",
+            "ctx": {"enum_values": ["sms", "whatsapp", "email"]},
         }
     ]
 
@@ -57,7 +60,7 @@ def test_empty_data():
     with pytest.raises(ValidationError) as info:
         notify: NotifyModel = NotifyModel(**bad_notify)
     assert json.loads(info.value.json()) == [
-        {'loc': ['data'], 'msg': 'Field data cannot be empty.', 'type': 'value_error'}
+        {"loc": ["data"], "msg": "Field data cannot be empty.", "type": "value_error",}
     ]
 
 
@@ -66,4 +69,4 @@ def test_data_wrong_type():
     bad_notify["data"] = []
     with pytest.raises(ValidationError) as info:
         notify: NotifyModel = NotifyModel(**bad_notify)
-    assert json.loads(info.value.json()) == [{'loc': ['data'], 'msg': '', 'type': 'assertion_error'}]
+    assert json.loads(info.value.json()) == [{"loc": ["data"], "msg": "", "type": "assertion_error"}]

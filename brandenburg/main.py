@@ -1,9 +1,12 @@
+# Standard library imports
 from functools import lru_cache
 
+# Third party imports
 import uvicorn
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+# Local application imports
 from brandenburg.auth import get_fast_auth
 from brandenburg.config import settings
 from brandenburg.routers import imports, leads, notify
@@ -21,8 +24,8 @@ tags_metadata = [
         "name": "leads",
         "description": "Service to collect leads through our landing pages then it should be used in the marketing campaigns.",
     },
-    {"name": "import", "description": "Service to import data in lambda architecture."},
-    {"name": "notify", "description": "Service to notify client using email, whatsapp or sms."},
+    {"name": "import", "description": "Service to import data in lambda architecture.",},
+    {"name": "notify", "description": "Service to notify client using email, whatsapp or sms.",},
 ]
 
 
@@ -37,7 +40,6 @@ app = FastAPI(
     docs_url=None,
 )
 app.openapi_tags = tags_metadata
-# oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
 
 @lru_cache()
@@ -54,12 +56,18 @@ app.add_middleware(
     allow_headers=["*"],  # TODO: set the correctness headers only
 )
 
-if settings.NAMESPACE.lower() in ("stg", 'prod'):
+if settings.NAMESPACE.lower() in ("stg", "prod"):
+    # Third party imports
     from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 
     app.add_middleware(HTTPSRedirectMiddleware)
 
-app.include_router(leads.router, prefix="/v1", tags=["leads"], responses={404: {"description": "Not found"}})
+app.include_router(
+    leads.router, prefix="/v1", tags=["leads"], responses={404: {"description": "Not found"}},
+)
+app.include_router(
+    leads.router, prefix="/v1", tags=["leads"], responses={404: {"description": "Not found"}},
+)
 
 app.include_router(
     imports.router,
@@ -91,6 +99,7 @@ async def startup_event():
 
 @app.on_event("shutdown")
 async def shutdown_event():
+    # Local application imports
     from brandenburg.toolbox._backends.redis import RedisBackend
 
     cache = await RedisBackend(settings.REDIS_URL).get_instance()
@@ -99,4 +108,4 @@ async def shutdown_event():
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host=settings.HOST_BIND, port=8000)

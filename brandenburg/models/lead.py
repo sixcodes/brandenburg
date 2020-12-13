@@ -1,5 +1,7 @@
+# Standard library imports
 from typing import Tuple, List
 
+# Third party imports
 from pydantic import BaseModel, validator, EmailStr, Field
 
 # @doc.consumes(
@@ -31,7 +33,9 @@ class LeadModel(BaseModel):
     def __init__(self, name: str, phone_number: str, email: EmailStr, **data) -> None:
         """"""
         group: str = self.__get_group(email)
-        super().__init__(name=name, phone_number=phone_number, email=email, group=group, **data)
+        super().__init__(
+            name=name, phone_number=phone_number, email=email, group=group, **data,
+        )
 
     @validator("name", pre=True, always=True)
     def name_validator(cls, value):
@@ -51,7 +55,7 @@ class LeadModel(BaseModel):
         return value
 
     def __get_group(self, email) -> str:
-        providers: List[str] = (
+        providers: List[str] = [
             "gmail.com",
             "g1.com",
             "hotmail.com",
@@ -79,7 +83,7 @@ class LeadModel(BaseModel):
             "gmx.com",
             "gmx.us",
             "zohomail.eu",
-        )
+        ]
         for item in providers:
             if email.find(item) > 0:
                 return "A"

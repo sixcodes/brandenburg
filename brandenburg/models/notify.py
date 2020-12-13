@@ -1,13 +1,17 @@
+# Standard library imports
 from enum import Enum
 from typing import Union, Dict
 
+# Third party imports
 from pydantic import BaseModel, ValidationError, EmailStr, Field, validator
+
+# TODO: A great candidate to be a protobuffer file
 
 
 class ByEnum(str, Enum):
-    sms = 'sms'
-    whatsapp = 'whatsapp'
-    email = 'email'
+    sms = "sms"
+    whatsapp = "whatsapp"
+    email = "email"
 
 
 class NotifyModel(BaseModel):

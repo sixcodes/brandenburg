@@ -1,3 +1,4 @@
+# Third party imports
 import structlog
 
 structlog.configure(

@@ -1,10 +1,13 @@
+# Standard library imports
 from functools import lru_cache
 from typing import Tuple, List
 
+# Third party imports
 from google.cloud import pubsub_v1, storage
 from google.oauth2.service_account import Credentials
 from pydantic.types import Json
 
+# Local application imports
 from brandenburg.config import settings
 from brandenburg.interfaces import ProviderInterface
 from brandenburg.toolbox.logger import log
@@ -45,12 +48,12 @@ def pub_client():
                         "total_timeout_millis": 600000,  # default: 600000
                     }
                 },
-                "methods": {"Publish": {"retry_codes_name": "publish", "retry_params_name": "messaging"}},
+                "methods": {"Publish": {"retry_codes_name": "publish", "retry_params_name": "messaging",}},
             }
         }
     }
     logger.debug("<<<<<<<<<< create a connection >>>>>>>>>")
-    return pubsub_v1.PublisherClient(client_config=retry_settings, credentials=credentials)
+    return pubsub_v1.PublisherClient(credentials=credentials)
 
 
 publisher_client = pub_client()
@@ -106,11 +109,8 @@ class GCP(ProviderInterface):
         """
         TODO: add exception cases and return statement
         """
-        bucket = storage.Client(project=settings.GOOGLE_PROJECT_ID, credentials=self.get_credentials()).get_bucket(
+        bucket = storage.Client(project=settings.GOOGLE_PROJECT_ID, credentials=self.get_credentials(),).get_bucket(
             settings.BUCKET_STAGE
         )
 
         blob = storage.Blob(path, bucket).upload_from_file(file)
-
-    def get_template(self):
-        pass

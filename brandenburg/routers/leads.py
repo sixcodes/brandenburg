@@ -1,6 +1,8 @@
+# Third party imports
 from fastapi import APIRouter, Request, status
 from fastapi.responses import UJSONResponse
 
+# Local application imports
 from brandenburg.models.lead import LeadModel
 from brandenburg.services.lead import LeadService
 from brandenburg.toolbox.funcs import Funcs
@@ -20,7 +22,9 @@ async def get_lead_token(request: Request):
     return {"token": token}
 
 
-@router.post("/leads/{token}/", status_code=201, responses={201: {"status": "OK", "message": "Batch Accepted!"}})
+@router.post(
+    "/leads/{token}/", status_code=201, responses={201: {"status": "OK", "message": "Batch Accepted!"}},
+)
 async def create_lead(lead: LeadModel, request: Request, token: str):
     """
     It expected the data from the landing page.
@@ -33,6 +37,6 @@ async def create_lead(lead: LeadModel, request: Request, token: str):
     logger.info(f"response: {result}, processed: {processed}")
     if processed:
         return UJSONResponse(
-            status_code=status.HTTP_201_CREATED, content={"status": "ok", "message": "Batch Accepted!"}
+            status_code=status.HTTP_201_CREATED, content={"status": "ok", "message": "Batch Accepted!"},
         )
     return UJSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=result)

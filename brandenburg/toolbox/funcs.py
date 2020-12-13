@@ -1,10 +1,13 @@
+# Standard library imports
 import base64
 import re
 import uuid
 from typing import Union, Dict, Tuple
 
+# Third party imports
 import ujson as json
 
+# Local application imports
 from brandenburg.config import settings
 from brandenburg.toolbox._backends.redis import RedisBackend
 from brandenburg.toolbox.logger import log
@@ -44,7 +47,7 @@ class Funcs:
         if isinstance(data, dict):
             return base64.b64encode(json.dumps(data).encode()).decode()
         else:
-            return base64.b64encode(data.encode()).decode()
+            return base64.b64encode(str(data).encode()).decode()
 
     @staticmethod
     def decode(data: str) -> Union[Dict[str, str], int, str]:
@@ -52,8 +55,8 @@ class Funcs:
             decoded = json.loads(base64.b64decode(data).decode())
             if isinstance(decoded, dict):
                 return decoded
-        except:
-            pass
+        except ValueError as ex:
+            logger.error(f"An error ocurred trying decode {data}, error: {ex}")
         try:
             return base64.b64decode(data.encode()).decode()
         except ValueError as ex:

@@ -1,8 +1,11 @@
+# Standard library imports
 from datetime import datetime
 from typing import Tuple, List, Dict, Union, Set, Optional
 
+# Third party imports
 from pydantic import BaseModel, PrivateAttr, Field, Json, validator, root_validator
 
+# Local application imports
 from brandenburg.config import settings
 
 BATCH_LIMIT: int = settings.BATCH_LIMIT
@@ -45,10 +48,12 @@ class BatchModel(BaseModel):
         max_items=BATCH_LIMIT,
     )
     key_names: Optional[List[str]] = Field(
-        list(), title="""An array of strings representing the Primary Key fields in the destination table."""
+        list(), title="""An array of strings representing the Primary Key fields in the destination table.""",
     )
     schema_mapping: Optional[List[SchemaMapping]]  # = Field(list({}), title="""The table schema""")
-    action: str = Field(title="This will always be upsert.", choices=(("upsert", "batch")), default="upsert")
+    action: str = Field(
+        title="This will always be upsert.", choices=(("upsert", "batch")), default="upsert",
+    )
     _sdc_received_at: str = PrivateAttr()
     _sdc_sequence: int = PrivateAttr()
 
@@ -65,7 +70,7 @@ class BatchModel(BaseModel):
         # import ipdb; ipdb.set_trace()
         super().__init__(**kwargs)
         NOW: datetime = datetime.now()
-        self._sdc_received_at = NOW.strftime('%y-%m-%d %I:%M:%S')
+        self._sdc_received_at = NOW.strftime("%y-%m-%d %I:%M:%S")
         self._sdc_sequence = int(NOW.timestamp())
 
     @validator("data", pre=True)
