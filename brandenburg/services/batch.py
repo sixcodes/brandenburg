@@ -22,7 +22,9 @@ class BatchService:
         return batch, True
 
     @staticmethod
-    async def upload(name: str, filename: str, file: bytes, hash: str, token: str):
+    async def upload(
+        name: str, filename: str, file: bytes, hash: str, token: str
+    ):
 
         path: str = f"{name}/{datetime.now().strftime('%Y/%m/%d')}"
         logger.info(

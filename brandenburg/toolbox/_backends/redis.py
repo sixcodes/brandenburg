@@ -56,7 +56,9 @@ class RedisBackend:
             logger.error(ex)
 
     @classmethod
-    async def set_cache(cls, key: str, value: str = "x", ttl: int = 600) -> Optional[bool]:
+    async def set_cache(
+        cls, key: str, value: str = "x", ttl: int = 600
+    ) -> Optional[bool]:
         try:
             with await cls.__instance.conn as cache:
                 await cache.set(key, value)

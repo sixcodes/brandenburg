@@ -24,8 +24,14 @@ tags_metadata = [
         "name": "leads",
         "description": "Service to collect leads through our landing pages then it should be used in the marketing campaigns.",
     },
-    {"name": "import", "description": "Service to import data in lambda architecture."},
-    {"name": "notify", "description": "Service to notify client using email, whatsapp or sms."},
+    {
+        "name": "import",
+        "description": "Service to import data in lambda architecture.",
+    },
+    {
+        "name": "notify",
+        "description": "Service to notify client using email, whatsapp or sms.",
+    },
 ]
 
 
@@ -56,13 +62,18 @@ app.add_middleware(
     allow_headers=["*"],  # TODO: set the correctness headers only
 )
 
-if settings.NAMESPACE.lower() in ("stg", 'prod'):
+if settings.NAMESPACE.lower() in ("stg", "prod"):
     # Third party imports
     from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 
     app.add_middleware(HTTPSRedirectMiddleware)
 
-app.include_router(leads.router, prefix="/v1", tags=["leads"], responses={404: {"description": "Not found"}})
+app.include_router(
+    leads.router,
+    prefix="/v1",
+    tags=["leads"],
+    responses={404: {"description": "Not found"}},
+)
 app.include_router(
     leads.router,
     prefix="/v1",

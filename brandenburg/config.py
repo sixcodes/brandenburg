@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     LOG_LEVEL: str = "trace"  # [critical|error|warning|info|debug|trace]
     PROD: bool = False
     NAMESPACE: str = "dev"
-    HOST_BIND:str = "127.0.0.1"
+    HOST_BIND: str = "127.0.0.1"
 
     AUTH_USERS: Dict[str, str] = {"ADMIN": "xyz"}
     BATCH_LIMIT: int = 1000
@@ -29,7 +29,13 @@ class Settings(BaseSettings):
 
     DEFAULT_LOCALE: str = "pt-BR"
     PROVIDER: str = "gcp"  # Option: aws or gcp
-    TOPICS: List[str] = ["email", "sms", "whatsapp", "salesforce", "test_brandenburg"]
+    TOPICS: List[str] = [
+        "email",
+        "sms",
+        "whatsapp",
+        "salesforce",
+        "test_brandenburg",
+    ]
     BUCKET_STAGE: str = ""
     TEMPLATE_BUCKET: str = ""
 
