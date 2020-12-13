@@ -1,11 +1,6 @@
-import base64
-import re
-from typing import List, Union, Dict, Tuple
+from brandenburg.toolbox.logger import log
 
-import boto3
-from structlog import get_logger
-
-logger = get_logger(__name__)
+logger = log.get_logger(__name__)
 
 
 class SMSService:

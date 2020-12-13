@@ -4,7 +4,6 @@ from ujson import dumps
 
 from brandenburg.config import settings
 from brandenburg.strategies import ProviderStrategy
-from brandenburg.toolbox.funcs import Funcs
 from brandenburg.toolbox.logger import log
 
 logger = log.get_logger(__name__)

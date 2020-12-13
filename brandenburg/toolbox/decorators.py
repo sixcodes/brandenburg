@@ -1,6 +1,5 @@
 # coding=utf-8
 import logging
-from json import dumps
 
 
 def log_exception_command(method_to_decorate):

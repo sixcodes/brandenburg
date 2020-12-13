@@ -7,8 +7,6 @@ from aioredis.errors import ReplyError
 from brandenburg.config import settings
 from brandenburg.toolbox.logger import log
 
-from .base import BaseBackend
-
 logger = log.get_logger(__name__)
 
 
@@ -22,16 +20,15 @@ class RedisBackend:
         RedisBackend.__instance.conn = None
         return RedisBackend.__instance
 
-    @staticmethod
-    async def get_instance() -> aioredis.commands.Redis:
+    async def get_instance(self) -> aioredis.commands.Redis:
         """
         Returns a lazily-cached redis conn for the instance's.
         """
-        _conn = RedisBackend.__instance.conn
+        _conn = self.__instance.conn
         if _conn is None:
-            _conn = await RedisBackend.__instance._get_new_conn()
-            RedisBackend.__instance.conn = _conn
-        return RedisBackend.__instance
+            _conn = await self.__instance._get_new_conn()
+            self.__instance.conn = _conn
+        return self.__instance
 
     @classmethod
     async def _get_new_conn(cls) -> None:
@@ -41,17 +38,22 @@ class RedisBackend:
         )
 
     @classmethod
-    async def disconnect(cls) -> None:
-        with await cls.__instance.conn as cache:
-            await cache.clear()
-            await cache.wait_close()
+    async def __disconnect(cls) -> None:
+        """
+        aioredis.commands.ContextRedis
+        """
+
+        cls.__instance.conn.close()
+        logger.info("Closing redis connection")
+        await cls.__instance.conn.wait_closed()
 
     @classmethod
-    async def set_cache(cls, key: str, value: str = "x", ttl: int = 3600) -> bool:
+    async def set_cache(cls, key: str, value: str = "x", ttl: int = 600) -> Optional[bool]:
         try:
             with await cls.__instance.conn as cache:
                 await cache.set(key, value)
                 await cache.expire(key, ttl)
+                await cls.__disconnect()
             logger.info(f"Configuring cache for key: {key}")
             return True
         except ReplyError as ex:
@@ -59,10 +61,12 @@ class RedisBackend:
         return False
 
     @classmethod
-    async def is_valid_token(cls, token: str) -> bool:
+    async def is_valid_token(cls, token: str) -> Optional[bool]:
         try:
             with await cls.__instance.conn as cache:
                 exists: str = await cache.exists(token)
+                logger.info("Disconnecting from redis cluster")
+                await cls.__disconnect()
             if exists:
                 return True
         except ReplyError as ex:
@@ -87,6 +91,7 @@ class RedisBackend:
 
         with await cls.__instance.conn as cache:
             value: bytes = await cache.get(key)
+            await cls.__disconnect()
         if value:
             return value.decode()
         return ""

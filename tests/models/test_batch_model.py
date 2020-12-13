@@ -16,10 +16,10 @@ BATCH = {
 
 def test_good_data():
     batch: BatchModel = BatchModel(**BATCH)
-    assert isinstance(batch.sdc_sequence, int) == True
-    assert batch.sdc_received_at is not None
+    assert batch._sdc_received_at is not None
+    assert isinstance(batch._sdc_sequence, int) is True
     assert len(batch.key_names) == 0
-    assert len(batch.schema_mapping) == 0
+    assert batch.schema_mapping is None
 
 
 def test_missing_data_field():
@@ -31,6 +31,19 @@ def test_missing_data_field():
     assert json.loads(info.value.json()) == [
         {'loc': ['data'], 'msg': 'Field data cannot be empty.', 'type': 'value_error'}
     ]
+
+
+def test_batch_with_schema_mapping():
+    params = copy.deepcopy(BATCH)
+    params["action"] = "batch"
+    params["key_names"] = ["Id"]
+    params["schema_mapping"] = [
+        {"type": "TIMESTAMP", "name": "LastUpdateDate", "is_nullable": "true"},
+        {"type": "INTEGER", "name": "Id", "is_nullable": "true"},
+        {"type": "STRING", "name": "Reason", "is_nullable": "true"},
+    ]
+    batch: BatchModel = BatchModel(**params)
+    assert len(batch.schema_mapping) == 3
 
 
 def test_batch_missing_schema():

@@ -1,7 +1,6 @@
 from typing import List, Tuple, Dict, Union
 
 import ET_Client
-import ujson as json
 
 from brandenburg.config import settings
 from brandenburg.interfaces import BrokerInterface
@@ -37,7 +36,9 @@ class SalesforceBroker(BrokerInterface):
         row.auth_stub = self.get_client()
         row.props = message
         response = row.post()
-        logger.info(f"post_tatus: {str(response.status)}, code: {str(response.code)}, message: {str(response.message)}")
+        logger.info(
+            f"post status: {str(response.status)}, code: {str(response.code)}, message: {str(response.message)}"
+        )
         logger.info("Results: " + str(response.results))
         if int(response.status) == 200:
             return True
@@ -50,3 +51,5 @@ class SalesforceBroker(BrokerInterface):
         logger.info("handling")
 
         self.send_rows(data, settings.SF_LEAD_CUSTOMER_KEY)
+        # FIXME: handle with possible errors here
+        return True

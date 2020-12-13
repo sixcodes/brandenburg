@@ -7,7 +7,7 @@ import ujson as json
 from brandenburg.config import settings
 
 DATA: Dict[str, str] = {
-    "service_id": "salesforce",
+    "service_id": "test_brandenburg",
     "table_name": "user",
     "data": [{"id": 1, "name": "Maria"}],
     "action": "upsert",
@@ -50,7 +50,7 @@ def test_schema_mapping_without_key_names(client):
     pass
 
 
-@pytest.mark.fail
+@pytest.mark.xfail
 def test_send_empty_values(client):
     pass
 

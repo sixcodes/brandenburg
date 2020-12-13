@@ -1,6 +1,6 @@
+from brandenburg.config import settings
+from brandenburg.interfaces import BrokerInterface
 from brandenburg.toolbox.logger import log
-from config import settings
-from interfaces import BrokerInterface
 
 LOGGER = log.get_logger(__name__)
 

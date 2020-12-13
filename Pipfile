@@ -19,6 +19,10 @@ ujson = "==3.0.0"
 aiofiles = "==0.5.0"
 uvicorn = "==0.11.8"
 
+[packages.pydantic]
+extras = ["dotenv"]
+version = "===1.7.2"
+
 [dev-packages]
 pytest = "==5.4.3"
 pytest-cov = "==2.8.1"
@@ -40,9 +44,6 @@ fmt-check = "black -t py37 -v --line-length 120 --check --exclude node_modules/*
 isort-fmt = "isort --apply --recursive -j 4 --line-width 120 --use-parentheses --no-inline-sort --multi-line 3 --trailing-comma brandenburg tests"
 isort-check = "isort --check-only --recursive -j 4 --line-width 120 --use-parentheses --no-inline-sort --multi-line 3 --trailing-comma brandenburg tests"
 clean = "rm -vrf ./build ./dist ./*.pyc ./*.tgz ./*.egg-info ./out ./*/out ./.mypy_cache ./*/.mypy_cache */.pytest_cache .pytest_cache .serverless/*"
-
-[packages.pydantic]
-extras = [ "dotenv",]
 
 [packages.brandenburg]
 editable = true

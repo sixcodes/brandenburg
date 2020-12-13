@@ -12,7 +12,7 @@ router = APIRouter()
 @router.post("/notify/", status_code=202, responses={202: {"status": "OK", "message": "Notification Accepted!"}})
 async def create_notification(notify: NotifyModel, request: Request):
     logger.info(
-        f"""request: {request.json()}, headers: {dict(request.headers)}, ip:
+        f"""request: {await request.json()}, headers: {dict(request.headers)}, ip:
                 {request.client.host}"""
     )
     await PublisherService.publish(notify.dict(), notify.by)

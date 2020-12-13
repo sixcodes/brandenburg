@@ -1,0 +1,62 @@
+#!/bin/sh
+#TODO: Migrate this script to a terraform module/approach?
+
+# I'm assuming the VPC already created
+VPC=$1
+REGION=$2
+
+SERVICE=brandenburg
+PROJECT_ID=$(gcloud config list --format 'value(core.project)')
+PROJECT_NUMBER=$(gcloud projects list --filter="$PROJECT_ID" --format="value(PROJECT_NUMBER)")
+
+# Create VPC
+#gcloud services enable compute.googleapis.com
+
+# gcloud compute networks create xyz-vpc \
+#     --subnet-mode=custom \
+#     --bgp-routing-mode=regional
+
+
+# Create a Serverless VPC Access connectors
+#gcloud services enable vpcaccess.googleapis.com
+function create_access(){
+    gcloud compute networks vpc-access connectors create ${SERVICE}-connector \
+        --network ${VPC} \
+        --region ${REGION} \
+        --range 10.8.0.0/28
+}
+
+function set_permission(){
+# Grant Permissions
+    gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member=serviceAccount:service-$PROJECT_NUMBER@gcf-admin-robot.iam.gserviceaccount.com \
+    --role=roles/viewer
+
+    gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member=serviceAccount:service-$PROJECT_NUMBER@gcf-admin-robot.iam.gserviceaccount.com \
+    --role=roles/compute.networkUser
+}
+
+function configure_network(){
+# Reserve static IP
+    gcloud compute addresses create ${SERVICE}-functions-nat-ip --region=${REGION}
+
+# gcloud compute addresses list
+
+# Creating the Cloud Router
+    gcloud compute routers create ${SERVICE}-router \
+        --network ${VPC} \
+        --region ${REGION}
+
+# Creating Cloud Nat
+    gcloud compute routers nats create ${SERVICE}-nat-config \
+        --router=${SERVICE}-router \
+        --nat-external-ip-pool=${SERVICE}-functions-nat-ip \
+        --nat-all-subnet-ip-ranges \
+        --enable-logging
+}
+
+create_access
+set_permission
+configure_network
+
