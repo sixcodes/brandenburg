@@ -1,13 +1,7 @@
 {
     "_meta": {
         "hash": {
-<<<<<<< HEAD
-            "sha256": "0c3e0777829af0469de011b6a9341299bb968c36f7f98c0f03dbdb5561fd6c9b"
-||||||| parent of e9eff45 (First big refactor)
-            "sha256": "aff349c8df7e2746e7993b514c1dcfe694f1a63c72f30a3b7a742068aa823d02"
-=======
-            "sha256": "24527bef11e06e0788c85ceda82a910c0bfa347fdbc2557494858b4b4a53cad1"
->>>>>>> e9eff45 (First big refactor)
+            "sha256": "ca43e4314abdd9216f49098fdef61d63dfa2ccd1f5d0d15a4245ab0e10be1358"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -60,10 +54,6 @@
                 "sha256:aa88eafc6295132f4bc606f1df32b3248e0fa611724c0a216aceda767948ac75"
             ],
             "version": "==1.17.63"
-        },
-        "brandenburg": {
-            "editable": true,
-            "path": "."
         },
         "cachetools": {
             "hashes": [
@@ -150,7 +140,7 @@
                 "sha256:9e4d7ecfc600058e07ba661411a2b7de2fd0fafa17d1a7f7361cd47b1175c827",
                 "sha256:a2aeea129088da402665e92e0b25b04b073c04b2dce4ab65caaa38b7ce2e1a99"
             ],
-            "markers": "python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2, 3.3'",
+            "markers": "python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2'",
             "version": "==0.15.2"
         },
         "email-validator": {
@@ -401,7 +391,7 @@
                 "sha256:b85d0567b8666149a93172712e68920734333c0ce7e89b78b3e987f71e5ed4f9",
                 "sha256:cdf6525904cc597730141d61b36f2e4b8ecc257c420fa2f4549bac2c2d0cb72f"
             ],
-            "markers": "python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2, 3.3'",
+            "markers": "python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2'",
             "version": "==0.10.0"
         },
         "libcst": {
@@ -504,12 +494,6 @@
         "pydantic": {
             "extras": [
                 "dotenv"
-<<<<<<< HEAD
-            ],
-            "version": "===1.7.2"
-||||||| parent of e9eff45 (First big refactor)
-            ]
-=======
             ],
             "hashes": [
                 "sha256:025bf13ce27990acc059d0c5be46f416fc9b293f45363b3d19855165fee1874f",
@@ -543,7 +527,7 @@
                 "sha256:73ebfe9dbf22e832286dafa60473e4cd239f8592f699aa5adaf10050e6e1823c",
                 "sha256:75bb3f31ea686f1197762692a9ee6a7550b59fc6ca3a1f4b5d7e32fb98e2da2a"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2'",
             "version": "==2.8.1"
         },
         "python-dotenv": {
@@ -613,7 +597,7 @@
                 "sha256:30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259",
                 "sha256:8b74bedcbbbaca38ff6d7491d76f2b06b3592611af620f8426e82dddb04a5ced"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2'",
             "version": "==1.15.0"
         },
         "starlette": {
@@ -733,7 +717,6 @@
             ],
             "markers": "python_full_version >= '3.6.1'",
             "version": "==8.1"
->>>>>>> e9eff45 (First big refactor)
         }
     },
     "develop": {
@@ -758,11 +741,6 @@
                 "sha256:832aa3cde19744e49938b91fea06d69ecb9e649c93ba974535d08ad92164f700"
             ],
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
-<<<<<<< HEAD
-            "version": "==20.3.0"
-||||||| parent of e9eff45 (First big refactor)
-            "version": "==19.3.0"
-=======
             "version": "==20.3.0"
         },
         "bandit": {
@@ -772,7 +750,6 @@
             ],
             "index": "pypi",
             "version": "==1.6.3"
->>>>>>> e9eff45 (First big refactor)
         },
         "black": {
             "hashes": [
@@ -808,13 +785,6 @@
         },
         "certifi": {
             "hashes": [
-<<<<<<< HEAD
-                "sha256:1f422849db327d534e3d0c5f02a263458c3955ec0aae4ff09b95f195c59f4edd",
-                "sha256:f05def092c44fbf25834a51509ef6e631dc19765ab8a57b4e7ab85531f0a9cf4"
-||||||| parent of e9eff45 (First big refactor)
-                "sha256:5930595817496dd21bb8dc35dad090f1c2cd0adfaf21204bf6732ca5d8ee34d3",
-                "sha256:8fc0819f1f30ba15bdb34cceffb9ef04d99f420f68eb75d901e9560b8749fc41"
-=======
                 "sha256:1a4995114262bffbc2413b159f2a1a480c969de6e6eb13ee966d470af86af59c",
                 "sha256:719a74fb9e33b9bd44cc7f3a8d94bc35e4049deebe19ba7d8e108280cfd59830"
             ],
@@ -824,16 +794,9 @@
             "hashes": [
                 "sha256:32e43d604bbe7896fe7c248a9c2276447dbef840feb28fe20494f62af110211d",
                 "sha256:cf22deb93d4bcf92f345a5c3cd39d3d41d6340adc60c78bbbd6588c384fda6a1"
->>>>>>> e9eff45 (First big refactor)
             ],
-<<<<<<< HEAD
-            "version": "==2020.11.8"
-||||||| parent of e9eff45 (First big refactor)
-            "version": "==2020.6.20"
-=======
             "markers": "python_full_version >= '3.6.1'",
             "version": "==3.2.0"
->>>>>>> e9eff45 (First big refactor)
         },
         "chardet": {
             "hashes": [
@@ -921,7 +884,7 @@
                 "sha256:9e4d7ecfc600058e07ba661411a2b7de2fd0fafa17d1a7f7361cd47b1175c827",
                 "sha256:a2aeea129088da402665e92e0b25b04b073c04b2dce4ab65caaa38b7ce2e1a99"
             ],
-            "markers": "python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2, 3.3'",
+            "markers": "python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2'",
             "version": "==0.15.2"
         },
         "dparse": {
@@ -989,23 +952,10 @@
         },
         "importlib-metadata": {
             "hashes": [
-<<<<<<< HEAD
-                "sha256:77a540690e24b0305878c37ffd421785a6f7e53c8b5720d211b211de8d0e95da",
-                "sha256:cefa1a2f919b866c5beb7c9f7b0ebb4061f30a8a9bf16d609b000e2dfaceb9c3"
-||||||| parent of e9eff45 (First big refactor)
-                "sha256:90bb658cdbbf6d1735b6341ce708fc7024a3e14e99ffdc5783edea9f9b077f83",
-                "sha256:dc15b2969b4ce36305c51eebe62d418ac7791e9a157911d58bfb1f9ccd8e2070"
-=======
                 "sha256:6112e21359ef8f344e7178aa5b72dc6e62b38b0d008e6d3cb212c5b84df72013",
                 "sha256:b0c2d3b226157ae4517d9625decf63591461c66b3a808c2666d538946519d170"
->>>>>>> e9eff45 (First big refactor)
             ],
-            "markers": "python_version < '3.8'",
-<<<<<<< HEAD
-            "version": "==2.0.0"
-||||||| parent of e9eff45 (First big refactor)
-            "version": "==1.7.0"
-=======
+            "markers": "python_version < '3.8' and python_version < '3.8'",
             "version": "==3.1.1"
         },
         "iniconfig": {
@@ -1014,7 +964,6 @@
                 "sha256:bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32"
             ],
             "version": "==1.1.1"
->>>>>>> e9eff45 (First big refactor)
         },
         "isort": {
             "hashes": [
@@ -1077,26 +1026,10 @@
         },
         "mccabe": {
             "hashes": [
-<<<<<<< HEAD
-                "sha256:8e1a2a43b2f2727425f2b5839587ae37093f19153dc26c0927d1048ff6557330",
-                "sha256:b3a9005928e5bed54076e6e549c792b306fddfe72b2d1d22dd63d42d5d3899cf"
-||||||| parent of e9eff45 (First big refactor)
-                "sha256:68c70cc7167bdf5c7c9d8f6954a7837089c6a36bf565383919bb595efb8a17e5",
-                "sha256:b78134b2063dd214000685165d81c154522c3ee0a1c0d4d113c80361c234c5a2"
-=======
                 "sha256:ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42",
                 "sha256:dd8d182285a0fe56bace7f45b5e7d1a6ebcbf524e8f3bd87eb0f125271b8831f"
->>>>>>> e9eff45 (First big refactor)
             ],
-<<<<<<< HEAD
-            "markers": "python_version >= '3.5'",
-            "version": "==8.6.0"
-||||||| parent of e9eff45 (First big refactor)
-            "markers": "python_version >= '3.5'",
-            "version": "==8.4.0"
-=======
             "version": "==0.6.1"
->>>>>>> e9eff45 (First big refactor)
         },
         "mypy": {
             "hashes": [
@@ -1215,7 +1148,7 @@
                 "sha256:c203ec8783bf771a155b207279b9bccb8dea02d8f0c9e5f8ead507bc3246ecc1",
                 "sha256:ef9d7589ef3c200abe66653d3f1ab1033c3c419ae9b9bdb1240a85b024efc88b"
             ],
-            "markers": "python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2, 3.3'",
+            "markers": "python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2'",
             "version": "==2.4.7"
         },
         "pytest": {
@@ -1348,7 +1281,7 @@
                 "sha256:30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259",
                 "sha256:8b74bedcbbbaca38ff6d7491d76f2b06b3592611af620f8426e82dddb04a5ced"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2'",
             "version": "==1.15.0"
         },
         "smmap": {
@@ -1369,31 +1302,17 @@
         },
         "toml": {
             "hashes": [
-<<<<<<< HEAD
-                "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b",
-                "sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f"
-||||||| parent of e9eff45 (First big refactor)
-                "sha256:926b612be1e5ce0634a2ca03470f95169cf16f939018233a670519cb4ac58b0f",
-                "sha256:bda89d5935c2eac546d648028b9901107a595863cb36bae0c73ac804a9b4ce88"
-=======
                 "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b",
                 "sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f"
             ],
-            "markers": "python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2, 3.3'",
+            "markers": "python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2'",
             "version": "==0.10.2"
         },
         "tqdm": {
             "hashes": [
                 "sha256:38b658a3e4ecf9b4f6f8ff75ca16221ae3378b2e175d846b6b33ea3a20852cf5",
                 "sha256:d4f413aecb61c9779888c64ddf0c62910ad56dcbe857d8922bb505d4dbff0df1"
->>>>>>> e9eff45 (First big refactor)
             ],
-<<<<<<< HEAD
-            "markers": "python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2, 3.3'",
-            "version": "==0.10.2"
-||||||| parent of e9eff45 (First big refactor)
-            "version": "==0.10.1"
-=======
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==4.54.1"
         },
@@ -1404,7 +1323,6 @@
             ],
             "index": "pypi",
             "version": "==3.2.0"
->>>>>>> e9eff45 (First big refactor)
         },
         "typed-ast": {
             "hashes": [
@@ -1454,16 +1372,8 @@
                 "sha256:8d7eaa5a82a1cac232164990f04874c594c9453ec55eef02eab885aa02fc17a2",
                 "sha256:f5321fbe4bf3fefa0efd0bfe7fb14e90909eb62a48ccda331726b4319897dd5e"
             ],
-<<<<<<< HEAD
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4' and python_version < '4'",
-            "version": "==1.25.11"
-||||||| parent of e9eff45 (First big refactor)
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4' and python_version < '4'",
-            "version": "==1.25.10"
-=======
             "markers": "python_version != '3.4'",
             "version": "==1.25.11"
->>>>>>> e9eff45 (First big refactor)
         },
         "virtualenv": {
             "hashes": [
