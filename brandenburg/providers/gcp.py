@@ -1,10 +1,13 @@
+# Standard library imports
 from functools import lru_cache
 from typing import Tuple, List
 
+# Third party imports
 from google.cloud import pubsub_v1, storage
 from google.oauth2.service_account import Credentials
 from pydantic.types import Json
 
+# Local application imports
 from brandenburg.config import settings
 from brandenburg.interfaces import ProviderInterface
 from brandenburg.toolbox.logger import log
@@ -45,12 +48,17 @@ def pub_client():
                         "total_timeout_millis": 600000,  # default: 600000
                     }
                 },
-                "methods": {"Publish": {"retry_codes_name": "publish", "retry_params_name": "messaging"}},
+                "methods": {
+                    "Publish": {
+                        "retry_codes_name": "publish",
+                        "retry_params_name": "messaging",
+                    }
+                },
             }
         }
     }
     logger.debug("<<<<<<<<<< create a connection >>>>>>>>>")
-    return pubsub_v1.PublisherClient(client_config=retry_settings, credentials=credentials)
+    return pubsub_v1.PublisherClient(credentials=credentials)
 
 
 publisher_client = pub_client()
@@ -70,7 +78,9 @@ class GCP(ProviderInterface):
         credentials: Credentials
         google_credentials: Json = settings.GOOGLE_CREDENTIALS
         if google_credentials:
-            credentials = Credentials.from_service_account_info(google_credentials)
+            credentials = Credentials.from_service_account_info(
+                google_credentials
+            )
         else:
             credentials = Credentials()
         logger.info("Authenticating on GCP")
@@ -82,10 +92,15 @@ class GCP(ProviderInterface):
             TODO: Add a return statement and handle with exceptions
         """
         GOOGLE_PROJECT_ID: str = settings.GOOGLE_PROJECT_ID
-        client: pubsub_v1.PublisherClient = pubsub_v1.PublisherClient(credentials=self.get_credentials())
+        client: pubsub_v1.PublisherClient = pubsub_v1.PublisherClient(
+            credentials=self.get_credentials()
+        )
         project = client.project_path(GOOGLE_PROJECT_ID)
         logger.info(f"Checking if all topics already exists")
-        existing_topics: List[str] = [element.name.split("/")[3] for element in client.list_topics(project)]
+        existing_topics: List[str] = [
+            element.name.split("/")[3]
+            for element in client.list_topics(project)
+        ]
         logger.info(f"Existing opics: { existing_topics}")
         for topic in set(topics).difference(existing_topics):
             topic_name: str = client.topic_path(GOOGLE_PROJECT_ID, topic)
@@ -106,11 +121,9 @@ class GCP(ProviderInterface):
         """
         TODO: add exception cases and return statement
         """
-        bucket = storage.Client(project=settings.GOOGLE_PROJECT_ID, credentials=self.get_credentials()).get_bucket(
-            settings.BUCKET_STAGE
-        )
+        bucket = storage.Client(
+            project=settings.GOOGLE_PROJECT_ID,
+            credentials=self.get_credentials(),
+        ).get_bucket(settings.BUCKET_STAGE)
 
         blob = storage.Blob(path, bucket).upload_from_file(file)
-
-    def get_template(self):
-        pass

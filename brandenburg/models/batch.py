@@ -96,3 +96,4 @@ class BatchModel(BaseModel):
     #     if not len([key in keys for key in value]):
     #         raise ValueError("Fields on key_names must be into data.")
     # return value
+

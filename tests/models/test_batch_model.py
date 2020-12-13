@@ -1,9 +1,12 @@
+# Standard library imports
 import copy
 
+# Third party imports
 import pytest
 import ujson as json
 from pydantic import ValidationError
 
+# Local application imports
 from brandenburg.models.batch import BatchModel
 
 BATCH = {
@@ -29,7 +32,11 @@ def test_missing_data_field():
         batch: BatchModel = BatchModel(**bad_batch)
 
     assert json.loads(info.value.json()) == [
-        {'loc': ['data'], 'msg': 'Field data cannot be empty.', 'type': 'value_error'}
+        {
+            "loc": ["data"],
+            "msg": "Field data cannot be empty.",
+            "type": "value_error",
+        }
     ]
 
 
@@ -54,9 +61,9 @@ def test_batch_missing_schema():
 
     assert json.loads(info.value.json()) == [
         {
-            'loc': ['action'],
-            'msg': 'Fields schema_mapping and key_names cannot be empty when action is batch',
-            'type': 'value_error',
+            "loc": ["action"],
+            "msg": "Fields schema_mapping and key_names cannot be empty when action is batch",
+            "type": "value_error",
         }
     ]
 
@@ -68,5 +75,9 @@ def test_with_data_over_1000():
         batch: BatchModel = BatchModel(**bad_batch)
 
     assert json.loads(info.value.json()) == [
-        {'loc': ['data'], 'msg': 'Field data exceed 1000 records.', 'type': 'value_error'}
+        {
+            "loc": ["data"],
+            "msg": "Field data exceed 1000 records.",
+            "type": "value_error",
+        }
     ]

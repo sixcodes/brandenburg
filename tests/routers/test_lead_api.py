@@ -1,10 +1,13 @@
+# Standard library imports
 import asyncio
 import json
 
+# Third party imports
 import aioredis
 import pytest
 from pydantic import ValidationError
 
+# Local application imports
 from brandenburg.config import settings
 
 LEAD = {
@@ -28,7 +31,9 @@ def test_get_token(client):
 def test_api_good_request(client):
     get_token = client.get("/v1/leads/token/", headers=headers)
     result = get_token.json()
-    res = client.post(f"/v1/leads/{result.get('token')}/", json=LEAD, headers=headers)
+    res = client.post(
+        f"/v1/leads/{result.get('token')}/", json=LEAD, headers=headers
+    )
     assert res.status_code == 201
 
 

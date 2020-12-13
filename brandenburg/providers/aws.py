@@ -1,7 +1,10 @@
+# Standard library imports
 from typing import List
 
+# Third party imports
 import boto3
 
+# Local application imports
 from brandenburg.config import settings
 from brandenburg.interfaces import ProviderInterface
 from brandenburg.toolbox.logger import log

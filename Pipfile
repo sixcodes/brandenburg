@@ -20,10 +20,6 @@ ujson = "==4.0.1"
 aiofiles = "==0.5.0"
 uvicorn = "==0.11.8"
 
-[packages.pydantic]
-extras = ["dotenv"]
-version = "===1.7.2"
-
 [dev-packages]
 asynctest = "==0.12.1"
 pytest = "==6.1.2"
@@ -51,7 +47,7 @@ test = "py.test -v --cov=brandenburg --cov-report=term-missing --cov-report=xml"
 lint = "mypy"
 fmt = "black ."
 fmt-check = "black --check ."
-isort-fmt = "isort --apply ."
+isort-fmt = "isort ."
 isort-check = "isort --check-only ."
 safety-check = "safety check"
 issues-check = "bandit --ini .bandit -r"
