@@ -1,7 +1,12 @@
-from typing import Dict
-from brandenburg.services.marketing import MarketingService
-from google.cloud.functions.context import Context
+# Standard library imports
 import time
+from typing import Dict
+
+# Third party imports
+from google.cloud.functions.context import Context
+
+# Local application imports
+from brandenburg.services.marketing import MarketingService
 
 
 def salesforce(event: Dict[str, str], context: Context) -> bool:
@@ -26,9 +31,12 @@ def salesforce(event: Dict[str, str], context: Context) -> bool:
     try:
         # README: In Google cloud function the file system is Read-only, however FuelSDk try to download a WSDL file if
         # it does't exists, this dowload is a temp workaround approach
+        # Third party imports
         import requests
 
-        wsdl = requests.get("https://webservice.exacttarget.com/etframework.wsdl")
+        wsdl = requests.get(
+            "https://webservice.exacttarget.com/etframework.wsdl"
+        )
         with open("/tmp/ExactTargetWSDL.xml", "w") as f:
             f.write(wsdl.text)
         MarketingService.execute(event, context)

@@ -8,25 +8,20 @@
 .idea
 *.md
 *.log
-*.tgz
 
 # files
 README.md
 docker-compose.yml
 
 # folders
-docs/
 dist/
 build/
-brandenburg.egg-info/
+tyrion.egg-info/
 .mypy_cache/
 .pytest_cache
 .circleci/
 .coverage
-out
-**/out
-.serverless
-tests/*
+
 test
 *.*.*.test*
 .cache

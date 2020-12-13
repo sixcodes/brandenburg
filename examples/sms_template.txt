@@ -1,2 +1,0 @@
-Olá {{username}}, você ganhou R$ {{value}} na loteria.
-

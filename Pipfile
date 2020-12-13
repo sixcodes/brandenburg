@@ -4,18 +4,19 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+brandenburg = {editable = true,path = "."}
+pydantic = {extras = ["dotenv"], version = "==1.7.3"}
 aioredis = "==1.3.0"
 email-validator = "==1.0.5"
 phonenumbers = "==8.12.6"
 boto3 = "==1.14.7"
-google-auth = "==1.19.1"
-google-cloud-pubsub = "==1.6.0"
-google-cloud-storage = "==1.29.0"
+google-auth = "==1.24.0"
+google-cloud-pubsub = "==2.2.0"
+google-cloud-storage = "==1.34.0"
 structlog = "==20.1.0"
-jinja2 = "==2.11.2"
-fastapi = "==0.58.0"
+fastapi = "==0.62.0"
 python-multipart = "==0.0.5"
-ujson = "==3.0.0"
+ujson = "==4.0.1"
 aiofiles = "==0.5.0"
 uvicorn = "==0.11.8"
 
@@ -24,27 +25,34 @@ extras = ["dotenv"]
 version = "===1.7.2"
 
 [dev-packages]
-pytest = "==5.4.3"
-pytest-cov = "==2.8.1"
-pytest-asyncio = "==0.12.0"
-codecov = "==2.0.15"
-mypy = "==0.770"
-black = "==19.3b0"
-isort = "==4.3.15"
-functions-framework = "*"
+asynctest = "==0.12.1"
+pytest = "==6.1.2"
+pytest-cov = "==2.10.1"
+pytest-mock = "==3.3.1"
+codecov = "==2.0.17"
+mypy = "==0.782"
+black = "==19.10b0"
+isort = "==5.1.4"
+lxml = "==4.6.2"
+safety = "==1.9.0"
+flake8 = "==3.8.4"
+flake8-bugbear = "==20.11.1"
+bandit = "==1.6.3"
+pre-commit = "==2.9.2"
+twine = "==3.2.0"
+bumpversion = "==0.6.0"
 
 [requires]
 python_version = "3"
 
 [scripts]
-test = "py.test -s -v --cov=./ --cov-report term-missing -v"
-lint = "mypy ./ --ignore-missing-imports"
-fmt = "black -S -t py37 -v --line-length 120 --exclude node_modules/* ."
-fmt-check = "black -t py37 -v --line-length 120 --check --exclude node_modules/* ."
-isort-fmt = "isort --apply --recursive -j 4 --line-width 120 --use-parentheses --no-inline-sort --multi-line 3 --trailing-comma brandenburg tests"
-isort-check = "isort --check-only --recursive -j 4 --line-width 120 --use-parentheses --no-inline-sort --multi-line 3 --trailing-comma brandenburg tests"
 clean = "rm -vrf ./build ./dist ./*.pyc ./*.tgz ./*.egg-info ./out ./*/out ./.mypy_cache ./*/.mypy_cache */.pytest_cache .pytest_cache .serverless/*"
-
-[packages.brandenburg]
-editable = true
-path = "."
+test = "py.test -v --cov=brandenburg --cov-report=term-missing --cov-report=xml"
+lint = "mypy"
+fmt = "black ."
+fmt-check = "black --check ."
+isort-fmt = "isort --apply ."
+isort-check = "isort --check-only ."
+safety-check = "safety check"
+issues-check = "bandit --ini .bandit -r"
+check-all = "pre-commit run --all-files"
