@@ -15,13 +15,9 @@ class ByEnum(str, Enum):
 
 
 class NotifyModel(BaseModel):
-    contact: Union[EmailStr, str] = Field(
-        ..., title="The contact email or phone number"
-    )
+    contact: Union[EmailStr, str] = Field(..., title="The contact email or phone number")
     by: ByEnum = Field(..., title="Which pipe it should be send")
-    data: Dict[str, Union[int, str, float]] = Field(
-        ..., title="Data to be used into template"
-    )
+    data: Dict[str, Union[int, str, float]] = Field(..., title="Data to be used into template")
     template_name: str = Field(..., title="Template name")
     locale: str = Field("pt-BR", title="Locale")
 

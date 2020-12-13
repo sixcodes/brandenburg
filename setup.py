@@ -2,10 +2,7 @@
 from os import path
 
 # Third party imports
-from setuptools import (  # Always prefer setuptools over distutils
-    find_packages,
-    setup,
-)
+from setuptools import find_packages, setup  # Always prefer setuptools over distutils
 
 here = path.abspath(path.dirname(__file__))
 

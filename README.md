@@ -7,7 +7,7 @@
 
 ## Dependencies API
 
-- Google Cloud Platform or AWS account 
+- Google Cloud Platform or AWS account
 - [Docker](https://docs.docker.com/get-docker/) (Optional)
 - Python 3.7+ (pyenv)
 - Pip (Pipenv)
@@ -27,7 +27,7 @@
     - This section is about [config](https://12factor.net/config)
     - This script has been tested on macOS and Linux(Debian like)
     - You could see all environment variables in [config.py](brandenburg/config.py)
- 
+
 Inside of the project you have to run the following commands.
 It will check and install all dependencies as needed.
 ```
@@ -77,7 +77,7 @@ I have used [httpie](https://httpie.org/) to do this job.
 Getting a token
 
 ```bash
-http 127.0.0.1:8000/v1/leads/token/ 
+http 127.0.0.1:8000/v1/leads/token/
 ```
 
 Sending to Salesforce Marketing cloud

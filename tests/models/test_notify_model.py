@@ -35,11 +35,7 @@ def test_missing_contact():
     with pytest.raises(ValidationError) as info:
         notify: NotifyModel = NotifyModel(**bad_notify)
     assert json.loads(info.value.json()) == [
-        {
-            "loc": ["contact"],
-            "msg": "field required",
-            "type": "value_error.missing",
-        }
+        {"loc": ["contact"], "msg": "field required", "type": "value_error.missing",}
     ]
 
 
@@ -64,11 +60,7 @@ def test_empty_data():
     with pytest.raises(ValidationError) as info:
         notify: NotifyModel = NotifyModel(**bad_notify)
     assert json.loads(info.value.json()) == [
-        {
-            "loc": ["data"],
-            "msg": "Field data cannot be empty.",
-            "type": "value_error",
-        }
+        {"loc": ["data"], "msg": "Field data cannot be empty.", "type": "value_error",}
     ]
 
 
@@ -77,6 +69,4 @@ def test_data_wrong_type():
     bad_notify["data"] = []
     with pytest.raises(ValidationError) as info:
         notify: NotifyModel = NotifyModel(**bad_notify)
-    assert json.loads(info.value.json()) == [
-        {"loc": ["data"], "msg": "", "type": "assertion_error"}
-    ]
+    assert json.loads(info.value.json()) == [{"loc": ["data"], "msg": "", "type": "assertion_error"}]

@@ -37,10 +37,7 @@ class RedisBackend:
     async def _get_new_conn(cls) -> None:
         loop = asyncio.get_event_loop()
         return await aioredis.create_redis_pool(
-            cls.__instance.url,
-            minsize=settings.REDIS_POOL_MIN_SIZE,
-            maxsize=settings.REDIS_POOL_MAX_SIZE,
-            loop=loop,
+            cls.__instance.url, minsize=settings.REDIS_POOL_MIN_SIZE, maxsize=settings.REDIS_POOL_MAX_SIZE, loop=loop,
         )
 
     @classmethod
@@ -56,9 +53,7 @@ class RedisBackend:
             logger.error(ex)
 
     @classmethod
-    async def set_cache(
-        cls, key: str, value: str = "x", ttl: int = 600
-    ) -> Optional[bool]:
+    async def set_cache(cls, key: str, value: str = "x", ttl: int = 600) -> Optional[bool]:
         try:
             with await cls.__instance.conn as cache:
                 await cache.set(key, value)
@@ -84,9 +79,7 @@ class RedisBackend:
 
         return False
 
-    async def get_or_create(
-        self, key: str, value: str = ""
-    ) -> Tuple[str, bool]:
+    async def get_or_create(self, key: str, value: str = "") -> Tuple[str, bool]:
         """
             This avoid the same key to be send twice to be processed
         """

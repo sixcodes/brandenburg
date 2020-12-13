@@ -17,15 +17,11 @@ class PublisherService:
     async def publish(data: Dict[str, str], routing_key: str) -> bool:
         topic: str = f"{routing_key}_{settings.NAMESPACE}"
         logger.info(f"sending messsage to topic: {topic}")
-        published = ProviderStrategy(settings.PROVIDER).context_publish(
-            topic, dumps(data).encode()
-        )
+        published = ProviderStrategy(settings.PROVIDER).context_publish(topic, dumps(data).encode())
         return published
 
     @staticmethod
     async def upload_file(path: str, file, **kwargs) -> bool:
         full_path: str = f"{settings.NAMESPACE}/{path}"
-        uploaded = ProviderStrategy(settings.PROVIDER).context_upload_file(
-            full_path, file
-        )
+        uploaded = ProviderStrategy(settings.PROVIDER).context_upload_file(full_path, file)
         return uploaded

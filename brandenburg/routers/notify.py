@@ -12,9 +12,7 @@ router = APIRouter()
 
 
 @router.post(
-    "/notify/",
-    status_code=202,
-    responses={202: {"status": "OK", "message": "Notification Accepted!"}},
+    "/notify/", status_code=202, responses={202: {"status": "OK", "message": "Notification Accepted!"}},
 )
 async def create_notification(notify: NotifyModel, request: Request):
     logger.info(

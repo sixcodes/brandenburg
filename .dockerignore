@@ -8,20 +8,25 @@
 .idea
 *.md
 *.log
+*.tgz
 
 # files
 README.md
 docker-compose.yml
 
 # folders
+docs/
 dist/
 build/
-tyrion.egg-info/
+brandenburg.egg-info/
 .mypy_cache/
 .pytest_cache
 .circleci/
 .coverage
-
+out
+**/out
+.serverless
+tests/*
 test
 *.*.*.test*
 .cache
@@ -40,3 +45,4 @@ develop-eggs
 
 # Installer logs
 pip-log.txt
+

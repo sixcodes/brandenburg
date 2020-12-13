@@ -21,9 +21,7 @@ except ImportError:
 # FIXME: Remove redis connection here
 async def get_fast_auth(
     credentials: HTTPBasicCredentials = Depends(security),
-    cache: aioredis.Redis = Depends(
-        RedisBackend(settings.REDIS_URL).get_instance
-    ),
+    cache: aioredis.Redis = Depends(RedisBackend(settings.REDIS_URL).get_instance),
 ) -> None:
     """
     By using the secrets.compare_digest() it will be secure against a type of attacks called "timing attacks".

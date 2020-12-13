@@ -3,14 +3,7 @@ from datetime import datetime
 from typing import Tuple, List, Dict, Union, Set, Optional
 
 # Third party imports
-from pydantic import (
-    BaseModel,
-    PrivateAttr,
-    Field,
-    Json,
-    validator,
-    root_validator,
-)
+from pydantic import BaseModel, PrivateAttr, Field, Json, validator, root_validator
 
 # Local application imports
 from brandenburg.config import settings
@@ -19,13 +12,9 @@ BATCH_LIMIT: int = settings.BATCH_LIMIT
 
 
 class ImportResponse(BaseModel):
-    status: str = Field(
-        ..., title="Status of response", choices=(("ok", "error"))
-    )
+    status: str = Field(..., title="Status of response", choices=(("ok", "error")))
     message: str
-    token: str = Field(
-        ..., title="A token to authenticate/validate the request postpone"
-    )
+    token: str = Field(..., title="A token to authenticate/validate the request postpone")
 
 
 class SchemaMapping(BaseModel):
@@ -38,9 +27,7 @@ class SchemaMapping(BaseModel):
         {"type": "STRING", "name": "document_number", "is_nullable": true}
     """
 
-    type: str = Field(
-        title="Column data type. E.g: numeric, decimal, float, varchar, date"
-    )
+    type: str = Field(title="Column data type. E.g: numeric, decimal, float, varchar, date")
     name: str = Field(title="Column Name on the database")
     is_nullable: bool = Field(title="If the column can be NULL", default=True)
 
@@ -61,16 +48,11 @@ class BatchModel(BaseModel):
         max_items=BATCH_LIMIT,
     )
     key_names: Optional[List[str]] = Field(
-        list(),
-        title="""An array of strings representing the Primary Key fields in the destination table.""",
+        list(), title="""An array of strings representing the Primary Key fields in the destination table.""",
     )
-    schema_mapping: Optional[
-        List[SchemaMapping]
-    ]  # = Field(list({}), title="""The table schema""")
+    schema_mapping: Optional[List[SchemaMapping]]  # = Field(list({}), title="""The table schema""")
     action: str = Field(
-        title="This will always be upsert.",
-        choices=(("upsert", "batch")),
-        default="upsert",
+        title="This will always be upsert.", choices=(("upsert", "batch")), default="upsert",
     )
     _sdc_received_at: str = PrivateAttr()
     _sdc_sequence: int = PrivateAttr()
@@ -106,9 +88,7 @@ class BatchModel(BaseModel):
     def action_validator(cls, value, values):
         if value == "batch":
             if not values["schema_mapping"] or not len(values["key_names"]):
-                raise ValueError(
-                    "Fields schema_mapping and key_names cannot be empty when action is batch"
-                )
+                raise ValueError("Fields schema_mapping and key_names cannot be empty when action is batch")
 
     # @validator("key_names", pre=True, always=True)
     # def key_names_validator(cls, value, values):

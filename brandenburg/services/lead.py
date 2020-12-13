@@ -17,9 +17,7 @@ logger = log.get_logger(__name__)
 
 class LeadService:
     @staticmethod
-    async def execute(
-        token: str, lead: LeadModel
-    ) -> Union[bool, Tuple[Dict[str, Union[str, List[str]]], bool]]:
+    async def execute(token: str, lead: LeadModel) -> Union[bool, Tuple[Dict[str, Union[str, List[str]]], bool]]:
         cache = await RedisBackend(settings.REDIS_URL).get_instance()
 
         is_valid: bool = await cache.is_valid_token(token)

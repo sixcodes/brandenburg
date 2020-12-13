@@ -14,11 +14,7 @@ NOTIFY = {
     "contact": "jesuesousa@gmail.com",
     "by": "email",
     "template_name": "mail_template",
-    "data": {
-        "logo_url": "https://site",
-        "username": "maria",
-        "token": "123456",
-    },
+    "data": {"logo_url": "https://site", "username": "maria", "token": "123456",},
 }
 
 # TODO: Move HEADERS to conftest file
@@ -40,20 +36,8 @@ def test_api_wrong_request(client):
     assert res.status_code == 422
     assert res.json() == {
         "detail": [
-            {
-                "loc": ["body", "contact"],
-                "msg": "field required",
-                "type": "value_error.missing",
-            },
-            {
-                "loc": ["body", "data"],
-                "msg": "field required",
-                "type": "value_error.missing",
-            },
-            {
-                "loc": ["body", "template_name"],
-                "msg": "field required",
-                "type": "value_error.missing",
-            },
+            {"loc": ["body", "contact"], "msg": "field required", "type": "value_error.missing",},
+            {"loc": ["body", "data"], "msg": "field required", "type": "value_error.missing",},
+            {"loc": ["body", "template_name"], "msg": "field required", "type": "value_error.missing",},
         ]
     }

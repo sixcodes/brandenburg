@@ -18,9 +18,7 @@ def test_encode_int():
 
 
 def test_encode_dict():
-    assert "eyJhcHAiOiJicmFuZGVuYnVyZyJ9" == Funcs.encode(
-        {"app": "brandenburg"}
-    )
+    assert "eyJhcHAiOiJicmFuZGVuYnVyZyJ9" == Funcs.encode({"app": "brandenburg"})
 
 
 def test_decode_string():
@@ -28,9 +26,7 @@ def test_decode_string():
 
 
 def test_decode_dict():
-    assert {"app": "brandenburg"} == Funcs.decode(
-        "eyJhcHAiOiJicmFuZGVuYnVyZyJ9"
-    )
+    assert {"app": "brandenburg"} == Funcs.decode("eyJhcHAiOiJicmFuZGVuYnVyZyJ9")
 
 
 def test_not_b64_string():

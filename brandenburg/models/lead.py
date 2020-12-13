@@ -30,17 +30,11 @@ class LeadModel(BaseModel):
     role: str = ""
     by: str = "salesforce"
 
-    def __init__(
-        self, name: str, phone_number: str, email: EmailStr, **data
-    ) -> None:
+    def __init__(self, name: str, phone_number: str, email: EmailStr, **data) -> None:
         """"""
         group: str = self.__get_group(email)
         super().__init__(
-            name=name,
-            phone_number=phone_number,
-            email=email,
-            group=group,
-            **data,
+            name=name, phone_number=phone_number, email=email, group=group, **data,
         )
 
     @validator("name", pre=True, always=True)
