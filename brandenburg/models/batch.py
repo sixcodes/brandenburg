@@ -1,9 +1,9 @@
 # Standard library imports
 from datetime import datetime
-from typing import Tuple, List, Dict, Union, Set, Optional
+from typing import List, Dict, Union, Optional
 
 # Third party imports
-from pydantic import BaseModel, PrivateAttr, Field, Json, validator, root_validator
+from pydantic import BaseModel, PrivateAttr, Field, validator
 
 # Local application imports
 from brandenburg.config import settings
@@ -70,18 +70,18 @@ class BatchModel(BaseModel):
         # import ipdb; ipdb.set_trace()
         super().__init__(**kwargs)
         NOW: datetime = datetime.now()
-        self._sdc_received_at = NOW.strftime("%y-%m-%d %I:%M:%S")
+        self._sdc_received_at = NOW.strftime("%y-%m-%d %H:%M:%S")
         self._sdc_sequence = int(NOW.timestamp())
 
     @validator("data", pre=True)
     def data_validator(cls, value):
         """
         """
-        assert isinstance(value, list) == True
-        if len(value) > BATCH_LIMIT:
-            raise ValueError(f"Field data exceed {BATCH_LIMIT} records.")
-        if not len(value):
-            raise ValueError("Field data cannot be empty.")
+        if isinstance(value, list):
+            if len(value) > BATCH_LIMIT:
+                raise ValueError(f"Field data exceed {BATCH_LIMIT} records.")
+            if not len(value):
+                raise ValueError("Field data cannot be empty.")
         return value
 
     @validator("action", always=True)
