@@ -85,15 +85,19 @@ class GCP(ProviderInterface):
             TODO: Add a return statement and handle with exceptions
         """
         GOOGLE_PROJECT_ID: str = settings.GOOGLE_PROJECT_ID
-        client: pubsub_v1.PublisherClient = pubsub_v1.PublisherClient(credentials=self.get_credentials())
-        project = client.project_path(GOOGLE_PROJECT_ID)
+        client: pubsub_v1.PublisherClient = publisher_client
         logger.info(f"Checking if all topics already exists")
-        existing_topics: List[str] = [element.name.split("/")[3] for element in client.list_topics(project)]
+        existing_topics: List[str] = [
+            element.name.split("/")[3] for element in client.list_topics(project=f"projects/{GOOGLE_PROJECT_ID}")
+        ]
         logger.info(f"Existing opics: { existing_topics}")
         for topic in set(topics).difference(existing_topics):
             topic_name: str = client.topic_path(GOOGLE_PROJECT_ID, topic)
             logger.info(f"creating topic: {topic_name}")
-            client.create_topic(topic_name)
+            try:
+                client.create_topic(topic_name)
+            except Exception as ex:
+                logger.error(ex)
 
     def publish(self, topic: str, data: str, **attrs):
         """

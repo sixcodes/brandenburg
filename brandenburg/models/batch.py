@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import List, Dict, Union, Optional
 
 # Third party imports
+from dateutil.parser import parse
 from pydantic import BaseModel, PrivateAttr, Field, validator
 
 # Local application imports
@@ -54,6 +55,9 @@ class BatchModel(BaseModel):
     action: str = Field(
         title="This will always be upsert.", choices=(("upsert", "batch")), default="upsert",
     )
+    sequence_pointer_field: str = Field(
+        ..., title="""The datetime/timestamp field to be used as data pointer. E.g: updated_at"""
+    )
     _sdc_received_at: str = PrivateAttr()
     _sdc_sequence: int = PrivateAttr()
 
@@ -61,13 +65,16 @@ class BatchModel(BaseModel):
         """
         :param service_id:
         :param table_name:
+        :param data:
+        :param key_names:
+        :param schema_mapping:
         :param action:
+        :param sequence_pointer_field:
         :param sdc_sequence: An integer that tells the Import API the order in which data points in the request body should be
         considered for loading. This data will be stored in the destination table in the _sequence column.
         This API uses a Unix epoch (in milliseconds) as the value for this property.
         Note: This value cannot exceed the maximum of 9223372036854775807.
         """
-        # import ipdb; ipdb.set_trace()
         super().__init__(**kwargs)
         NOW: datetime = datetime.now()
         self._sdc_received_at = NOW.strftime("%y-%m-%d %H:%M:%S")
@@ -101,3 +108,13 @@ class BatchModel(BaseModel):
     #     if not len([key in keys for key in value]):
     #         raise ValueError("Fields on key_names must be into data.")
     # return value
+
+    @property
+    def last_updated_at(self) -> int:
+        """
+        set a timestamp as a property
+        """
+        last_ran: int = 0
+        if self.sequence_pointer_field is not None and self.data:
+            last_ran = int(max(parse(str(column[self.sequence_pointer_field])) for column in self.data).timestamp())
+        return last_ran

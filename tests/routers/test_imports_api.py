@@ -9,11 +9,14 @@ import ujson as json
 # Local application imports
 from brandenburg.config import settings
 
+xfail = pytest.mark.xfail
+
 DATA: Dict[str, str] = {
     "service_id": "test_brandenburg",
     "table_name": "user",
-    "data": [{"id": 1, "name": "Maria"}],
+    "data": [{"id": 1, "name": "Maria", "updated_at": "2020-12-03T19:35:30.0494511"}],
     "action": "upsert",
+    "sequence_pointer_field": "updated_at",
 }
 
 
@@ -39,12 +42,20 @@ def test_api_get_401_without_auth(client):
     assert res.status_code == 401
 
 
-@pytest.mark.xfail
+def test_api_with_sequence_field_request(client):
+    data: Dict[str, str] = copy.deepcopy(DATA)
+    data.update({"sequence_pointer_field": "updated_at"})
+    res = client.post(f"/v1/import/push/", json=data, headers=HEADERS)
+    assert res.status_code == 201
+
+
 def test_full_fields(client):
     full: Dict[str, str] = copy.deepcopy(DATA)
     full["key_names"] = ["id"]
-    full["schema_mapping"] = [{"a": "s"}]
-    pass
+    full["schema_mapping"] = [{"name": "id", "type": "int", "is_nullable": True}]
+    full["action"] = "batch"
+    res = client.post(f"/v1/import/batch/", json=full, headers=HEADERS)
+    assert res.status_code == 201
 
 
 @pytest.mark.xfail
@@ -82,4 +93,9 @@ def test_send_file_and_check_background_function(client):
     """
     Check if the files was uploaded
     """
+    pass
+
+
+@xfail
+def test_check_last_datetime_field(client):
     pass
