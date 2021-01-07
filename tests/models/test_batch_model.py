@@ -13,7 +13,12 @@ BATCH = {
     "service_id": "raw",
     "table_name": "users",
     "action": "upsert",
-    "data": [{"id": 1, "name": "maria", "email": "maria@uol.in"}],
+    "data": [
+        {"id": 1, "name": "maria", "email": "maria@uol.in", "updated_at": "2020-08-05T16:48:39.343"},
+        {"id": 2, "name": "alana", "email": "alana@aon.in", "updated_at": "2021-01-05T10:08:39.000"},
+        {"id": 3, "name": "joana", "email": "joana@aon.in", "updated_at": "2020-12-05T10:08:39.000"},
+    ],
+    "sequence_pointer_field": "updated_at",
 }
 
 
@@ -73,3 +78,8 @@ def test_with_data_over_1000():
     assert json.loads(info.value.json()) == [
         {"loc": ["data"], "msg": "Field data exceed 1000 records.", "type": "value_error",}
     ]
+
+
+def test_get_max_datetime():
+    batch: BatchModel = BatchModel(**BATCH)
+    assert batch.last_updated_at == 1609852119
