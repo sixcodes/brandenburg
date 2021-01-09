@@ -12,6 +12,7 @@ from brandenburg.config import settings
 from brandenburg.routers import imports, leads, notify
 from brandenburg.strategies import ProviderStrategy
 from brandenburg.toolbox.logger import log
+from brandenburg import __version__
 
 # from fastapi.security import OAuth2PasswordBearer
 
@@ -32,7 +33,7 @@ tags_metadata = [
 app = FastAPI(
     debug=settings.DEBUG,
     title="Brandenburg API",
-    version="0.1.0",
+    version=__version__,
     description="""This is a message hub that allows decoupling your messages using a streaming approach.
     It is a simple API restful that receives your message then it uses serverless to connect to a service
     to process your message in an async approach. These connectors we called tubes.""",
