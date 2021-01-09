@@ -19,7 +19,7 @@ class BatchService:
         batch.action = action
         res = await PublisherService.publish(batch.dict(), routing_key)
         LOGGER.info(f"sent_to_topic: {bool(res)}, batch: {batch}")
-        cls._set_last_ran(batch)
+        await cls._set_last_ran(batch)
         return batch, True
 
     @staticmethod
@@ -35,7 +35,12 @@ class BatchService:
 
     @classmethod
     async def _set_last_ran(cls, batch: BatchModel) -> None:
+
+        # TODO: Convert the redis connection into a decorator
         cache = await RedisBackend(settings.REDIS_URL).get_instance()
-        LOGGER.info(f"Configuring last ran date to table: {batch.table_name}, timestamp: {batch.last_updated_at}")
-        cache.set_cache(batch.table_name.lower(), batch.last_updated_at, -1)
+        table: str = batch.table_name.lower()
+        updated_at: int = batch.last_updated_at
+        last_updated_at: int = max(int(await cache.get(key=table) or 0), updated_at)
+        LOGGER.info(f"Configuring last ran date to table: {table}, timestamp: {last_updated_at}")
+        await cache.set_cache(key=table, value=last_updated_at, ttl=-1)
         LOGGER.info("last ran was set successfully")

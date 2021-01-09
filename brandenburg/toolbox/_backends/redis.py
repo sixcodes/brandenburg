@@ -96,7 +96,7 @@ class RedisBackend:
 
         with await cls.__instance.conn as cache:
             value: bytes = await cache.get(key)
-            await cls.__disconnect()
+            # await cls.__disconnect()
         if value:
             return value.decode()
         return ""
