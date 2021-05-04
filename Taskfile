@@ -19,6 +19,9 @@ function test {
 }
 
 
+
+
+
 function install {
     echo "install task not implemented"
 }
@@ -29,10 +32,11 @@ function build {
 
 
 function start {
-    rm -vrf ./build ./dist ./*.pyc ./*.tgz ./*.egg-info ./out ./*/out ./.mypy_cache ./*/.mypy_cache */.pytest_cache .pytest_cache .serverless/*
+    rm -vrf ./build ./dist ./*.pyc ./*.tgz ./*.egg-info ./out ./*/out ./.mypy_cache ./*/.mypy_cache */.pytest_cache \
+    .pytest_cache .serverless/* >> /dev/null
     echo "starting ..."
 
-    docker-compose -f platform/docker/docker-compose.yml up
+    docker-compose -f platform/docker/docker-compose.yml up -d
     uvicorn brandenburg.main:app --log-level trace --reload
 
 }
