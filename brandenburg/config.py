@@ -8,7 +8,7 @@ from pydantic import BaseSettings, RedisDsn, Json
 
 class Settings(BaseSettings):
     """
-        https://pydantic-docs.helpmanual.io/#settings
+    https://pydantic-docs.helpmanual.io/#settings
     """
 
     DEBUG: bool = True

@@ -4,7 +4,7 @@ from typing import List, Optional
 
 # Local application imports
 from brandenburg.config import settings
-from brandenburg.main import cache
+from brandenburg import cache
 
 try:
     # Third party imports

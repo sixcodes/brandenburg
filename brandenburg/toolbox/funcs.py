@@ -5,14 +5,12 @@ import uuid
 from typing import Union, Dict, Tuple
 
 # Third party imports
-import ujson as json
+import orjson as json
 
 # Local application imports
 from brandenburg.config import settings
 from brandenburg.toolbox._backends.redis import RedisBackend
-from brandenburg.toolbox.logger import log
-
-logger = log.get_logger(__name__)
+from brandenburg.toolbox.logger import logger
 
 
 class Funcs:
