@@ -1,18 +1,10 @@
 # Third party imports
-import structlog
 
-structlog.configure(
-    processors=[
-        structlog.processors.StackInfoRenderer(),
-        structlog.dev.set_exc_info,
-        structlog.processors.format_exc_info,
-        structlog.processors.TimeStamper(),
-        structlog.dev.ConsoleRenderer(),
-    ],
-    wrapper_class=structlog.BoundLogger,
-    context_class=dict,  # or OrderedDict if the runtime's dict is unordered (e.g. Python <3.6)
-    logger_factory=structlog.PrintLoggerFactory(),
-    cache_logger_on_first_use=False,
-)
+# Standard library imports
+import asyncio
+import logging
 
-log = structlog
+# Third party imports
+from aiologger.loggers.json import JsonLogger
+
+logger = JsonLogger.with_default_handlers(level=logging.DEBUG, extra={"applicationName": "araguaia"})
