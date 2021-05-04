@@ -7,13 +7,12 @@ from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 # Local application imports
+from brandenburg import __version__, cache
 from brandenburg.auth import get_fast_auth
 from brandenburg.config import settings
 from brandenburg.routers import imports, leads, notify
 from brandenburg.strategies import ProviderStrategy
 from brandenburg.toolbox.logger import logger
-from brandenburg import __version__
-from brandenburg import cache
 
 tags_metadata = [
     {

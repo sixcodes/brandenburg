@@ -3,8 +3,8 @@ import secrets
 from typing import List, Optional
 
 # Local application imports
-from brandenburg.config import settings
 from brandenburg import cache
+from brandenburg.config import settings
 
 try:
     # Third party imports
