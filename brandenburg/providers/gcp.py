@@ -10,9 +10,7 @@ from pydantic.types import Json
 # Local application imports
 from brandenburg.config import settings
 from brandenburg.interfaces import ProviderInterface
-from brandenburg.toolbox.logger import log
-
-logger = log.get_logger(__name__)
+from brandenburg.toolbox.logger import logger
 
 
 def pub_client():
@@ -48,7 +46,12 @@ def pub_client():
                         "total_timeout_millis": 600000,  # default: 600000
                     }
                 },
-                "methods": {"Publish": {"retry_codes_name": "publish", "retry_params_name": "messaging",}},
+                "methods": {
+                    "Publish": {
+                        "retry_codes_name": "publish",
+                        "retry_params_name": "messaging",
+                    }
+                },
             }
         }
     }
@@ -82,7 +85,7 @@ class GCP(ProviderInterface):
 
     def create_topics(self, topics: List[str]) -> None:
         """
-            TODO: Add a return statement and handle with exceptions
+        TODO: Add a return statement and handle with exceptions
         """
         GOOGLE_PROJECT_ID: str = settings.GOOGLE_PROJECT_ID
         client: pubsub_v1.PublisherClient = publisher_client
@@ -101,8 +104,8 @@ class GCP(ProviderInterface):
 
     def publish(self, topic: str, data: str, **attrs):
         """
-            TODO: handle exceptions and retries
-            Future: https://github.com/googleapis/python-api-core/blob/02d25799243bd76ac76423a08c063a2bee8d11e4/google/api_core/future/base.py#L23
+        TODO: handle exceptions and retries
+        Future: https://github.com/googleapis/python-api-core/blob/02d25799243bd76ac76423a08c063a2bee8d11e4/google/api_core/future/base.py#L23
         """
 
         topic_name: str = f"projects/{settings.GOOGLE_PROJECT_ID}/topics/{topic}"
@@ -113,8 +116,9 @@ class GCP(ProviderInterface):
         """
         TODO: add exception cases and return statement
         """
-        bucket = storage.Client(project=settings.GOOGLE_PROJECT_ID, credentials=self.get_credentials(),).get_bucket(
-            settings.BUCKET_STAGE
-        )
+        bucket = storage.Client(
+            project=settings.GOOGLE_PROJECT_ID,
+            credentials=self.get_credentials(),
+        ).get_bucket(settings.BUCKET_STAGE)
 
         blob = storage.Blob(path, bucket).upload_from_file(file)

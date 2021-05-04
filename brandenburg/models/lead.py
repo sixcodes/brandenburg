@@ -34,7 +34,11 @@ class LeadModel(BaseModel):
         """"""
         group: str = self.__get_group(email)
         super().__init__(
-            name=name, phone_number=phone_number, email=email, group=group, **data,
+            name=name,
+            phone_number=phone_number,
+            email=email,
+            group=group,
+            **data,
         )
 
     @validator("name", pre=True, always=True)

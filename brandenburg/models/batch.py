@@ -49,11 +49,14 @@ class BatchModel(BaseModel):
         max_items=BATCH_LIMIT,
     )
     key_names: Optional[List[str]] = Field(
-        list(), title="""An array of strings representing the Primary Key fields in the destination table.""",
+        list(),
+        title="""An array of strings representing the Primary Key fields in the destination table.""",
     )
     schema_mapping: Optional[List[SchemaMapping]]  # = Field(list({}), title="""The table schema""")
     action: str = Field(
-        title="This will always be upsert.", choices=(("upsert", "batch")), default="upsert",
+        title="This will always be upsert.",
+        choices=(("upsert", "batch")),
+        default="upsert",
     )
     sequence_pointer_field: str = Field(
         ..., title="""The datetime/timestamp field to be used as data pointer. E.g: updated_at"""
@@ -82,8 +85,7 @@ class BatchModel(BaseModel):
 
     @validator("data", pre=True)
     def data_validator(cls, value):
-        """
-        """
+        """"""
         if isinstance(value, list):
             if len(value) > BATCH_LIMIT:
                 raise ValueError(f"Field data exceed {BATCH_LIMIT} records.")

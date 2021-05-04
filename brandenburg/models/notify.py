@@ -23,8 +23,7 @@ class NotifyModel(BaseModel):
 
     @validator("data", pre=True)
     def data_validator(cls, value):
-        """
-        """
+        """"""
         assert isinstance(value, dict) == True
         if not value:
             raise ValueError("Field data cannot be empty.")
