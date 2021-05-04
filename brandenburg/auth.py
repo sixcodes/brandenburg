@@ -2,12 +2,9 @@
 import secrets
 from typing import List, Optional
 
-# Third party imports
-import aioredis
-
 # Local application imports
 from brandenburg.config import settings
-from brandenburg.toolbox._backends.redis import RedisBackend
+from brandenburg.main import cache
 
 try:
     # Third party imports
@@ -19,10 +16,7 @@ except ImportError:
     pass
 
 # FIXME: Remove redis connection here
-async def get_fast_auth(
-    credentials: HTTPBasicCredentials = Depends(security),
-    cache: aioredis.Redis = Depends(RedisBackend(settings.REDIS_URL).get_instance),
-) -> None:
+async def get_fast_auth(credentials: HTTPBasicCredentials = Depends(security)) -> None:
     """
     By using the secrets.compare_digest() it will be secure against a type of attacks called "timing attacks".
     """
@@ -44,6 +38,5 @@ async def create_users(auth_users: List[List[str]] = None) -> None:
 
     """
     TTL: int = 525600  # One year #TODO: turn it flexible
-    cache = await RedisBackend(settings.REDIS_URL).get_instance()
     for value in settings.AUTH_USERS:
-        await cache.set_cache(value[0], value[1], TTL)
+        await cache.set(value[0], value[1], TTL)
