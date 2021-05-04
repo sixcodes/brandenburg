@@ -1,0 +1,55 @@
+#!/bin/bash
+
+function test {
+    if [ `uname` = "Darwin" ]
+    then
+        echo "installing dependncies for MacOS"
+        # check if has brew
+        brew install redis-cli
+    else
+        echo "installing dependencies for Debian like"
+        apt-get install redis-server
+    fi
+
+    echo "Configuring user in redis to test"
+    redis-cli SET "ADMIN" "xyz"
+
+    echo "running test"
+    py.test -s -v --cov=./ --cov-report term-missing -v
+}
+
+
+function install {
+    echo "install task not implemented"
+}
+
+function build {
+    echo "build task not implemented"
+}
+
+
+function start {
+    rm -vrf ./build ./dist ./*.pyc ./*.tgz ./*.egg-info ./out ./*/out ./.mypy_cache ./*/.mypy_cache */.pytest_cache .pytest_cache .serverless/*
+    echo "starting ..."
+
+    docker-compose -f platform/docker/docker-compose.yml up
+    uvicorn brandenburg.main:app --log-level trace --reload
+
+}
+
+function stop {
+    docker-compose -f platform/docker/docker-compose.yml down
+}
+
+function default {
+    start
+}
+
+function help {
+    echo "$0 <task> <args>"
+    echo "Tasks:"
+    echo "$0 start -> Para iniciar o ..."
+}
+
+TIMEFORMAT="Task completed in %3lR"
+time ${@:-default}
