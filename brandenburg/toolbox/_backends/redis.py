@@ -5,98 +5,115 @@ from typing import Tuple, Optional
 # Third party imports
 import aioredis
 from aioredis.errors import ReplyError, ConnectionForcedCloseError
+from pydantic import RedisDsn
 
 # Local application imports
 from brandenburg.config import settings
-from brandenburg.toolbox.logger import log
-
-logger = log.get_logger(__name__)
+from brandenburg.toolbox.logger import logger
 
 
 class RedisBackend:
-    __instance: aioredis.Redis = None
+    def __init__(self, url: RedisDsn):
+        self.url = url
+        self.is_connected = False
+        self._pool = None
 
-    def __new__(cls, url: str):
-        if RedisBackend.__instance is None:
-            RedisBackend.__instance = object.__new__(cls)
-        RedisBackend.__instance.url = url
-        RedisBackend.__instance.conn = None
-        return RedisBackend.__instance
-
-    async def get_instance(self) -> aioredis.commands.Redis:
-        """
-        Returns a lazily-cached redis conn for the instance's.
-        """
-        _conn = self.__instance.conn
-        if _conn is None:
-            _conn = await self.__instance._get_new_conn()
-            self.__instance.conn = _conn
-        return self.__instance
-
-    @classmethod
-    async def _get_new_conn(cls) -> None:
+    async def connect(self) -> None:
+        assert self._pool is None, "RedisBackend is already running"
         loop = asyncio.get_event_loop()
-        return await aioredis.create_redis_pool(
-            cls.__instance.url, minsize=settings.REDIS_POOL_MIN_SIZE, maxsize=settings.REDIS_POOL_MAX_SIZE, loop=loop,
+        await logger.info("Initializing redis connection pool...")
+        self._pool = await aioredis.create_redis_pool(
+            self.url,
+            minsize=settings.REDIS_POOL_MIN_SIZE,
+            maxsize=settings.REDIS_POOL_MAX_SIZE,
+            loop=loop,
         )
+        self.is_connected = True
 
-    @classmethod
-    async def __disconnect(cls) -> None:
+    async def disconnect(self) -> None:
         """
         aioredis.commands.ContextRedis
         """
+        assert self._pool is not None, "RedisBackend is not running"
         try:
-            cls.__instance.conn.close()
-            logger.info("Closing redis connection")
-            await cls.__instance.conn.wait_closed()
+            self._pool.close()
+            await logger.info("Closing redis connection")
+            await self._pool.wait_closed()
+            self.is_connected = False
         except ConnectionForcedCloseError as ex:
-            logger.error(ex)
+            await logger.error(ex)
 
-    @classmethod
-    async def set_cache(cls, key: str, value: str = "x", ttl: int = 600) -> Optional[bool]:
+    async def __aenter__(self) -> "RedisBackend":
+        await self.connect()
+        return self
+
+    async def __aexit__(self, **kwargs) -> None:
+        await self.disconnect()
+
+    async def get(self, key: str) -> str:
+        """
+        ...
+        """
         try:
-            with await cls.__instance.conn as cache:
-                await cache.set(key, value)
-                await cache.expire(key, ttl)
-                await cls.__disconnect()
-            logger.info(f"Configuring cache for key: {key}")
-            return True
+            data: bytes = await self._pool.get(key)
+            return data.decode()
         except ReplyError as ex:
-            logger.error(ex)
+            await logger.error(ex)
         return False
 
-    @classmethod
-    async def is_valid_token(cls, token: str) -> Optional[bool]:
+    async def set(self, key: str, value: str) -> Optional[bool]:
+        """
+        ....
+        """
         try:
-            with await cls.__instance.conn as cache:
-                exists: str = await cache.exists(token)
-                logger.info("Disconnecting from redis cluster")
-                await cls.__disconnect()
+            await logger.info(f"Configuring cache for key: {key}")
+            await self._pool.set(key, value)
+            return True
+        except ReplyError as ex:
+            await logger.error(ex)
+        return False
+
+    async def set_ex(self, key: str, value: str, ttl: int = 600) -> Optional[bool]:
+        """
+        ....
+        """
+        try:
+            await logger.info(f"Configuring cache for key: {key}")
+            await self._pool.set(key, value)
+            await self._pool.expire(key, ttl)
+            return True
+        except ReplyError as ex:
+            await logger.error(ex)
+        return False
+
+    async def exists(self, token: str) -> Optional[bool]:
+        try:
+            exists: str = await self._pool.exists(token)
+            await logger.info("Disconnecting from redis cluster")
             if exists:
                 return True
         except ReplyError as ex:
-            logger.error(ex)
+            await logger.error(ex)
 
         return False
 
     async def get_or_create(self, key: str, value: str = "") -> Tuple[str, bool]:
         """
-            This avoid the same key to be send twice to be processed
+        This avoid the same key to be send twice to be processed
         """
-        value: bytes = await self.__instance.conn.get(key) or b"0"
+        value: bytes = await self._pool.get(key) or b"0"
         if int(value) == 1:
             return key, False
         else:
-            await self._conn.set(key, value)
+            await self._pool.set(key, value)
             return key, True
         return key, False
 
-    @classmethod
-    async def get(cls, key: str) -> str:
-
-        with await cls.__instance.conn as cache:
-            value: bytes = await cache.get(key)
-            # await cls.__disconnect()
-        if value:
-            return value.decode()
-        return ""
+    async def set_table_last_updated(self, table: str, updated_at: int) -> None:
+        """
+        ...
+        """
+        last_updated_ts: int = max(int(await self._pool.get(key=table) or 0), updated_at)
+        await logger.info(f"Configuring last ran date to table: {table}, timestamp: {last_updated_ts}")
+        await cls.set(key=table, value=last_updated_ts)
+        await logger.info("last ran was set successfully")
