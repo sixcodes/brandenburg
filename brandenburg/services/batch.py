@@ -8,9 +8,7 @@ from brandenburg.config import settings
 from brandenburg.models.batch import BatchModel
 from brandenburg.services.publisher import PublisherService
 from brandenburg.toolbox._backends.redis import RedisBackend
-from brandenburg.toolbox.logger import log
-
-LOGGER = log.get_logger(__name__)
+from brandenburg.toolbox.logger import logger
 
 
 class BatchService:
@@ -18,7 +16,7 @@ class BatchService:
     async def execute(cls, batch: BatchModel, routing_key: str, action: str = "upsert") -> Tuple[BatchModel, bool]:
         batch.action = action
         res = await PublisherService.publish(batch.dict(), routing_key)
-        LOGGER.info(f"sent_to_topic: {bool(res)}, batch: {batch}")
+        await logger.info(f"sent_to_topic: {bool(res)}, batch: {batch}")
         await cls._set_last_ran(batch)
         return batch, True
 
@@ -26,11 +24,11 @@ class BatchService:
     async def upload(name: str, filename: str, file: bytes, hash: str, token: str) -> bool:
 
         path: str = f"{name}/{datetime.now().strftime('%Y/%m/%d')}"
-        LOGGER.info(f"uploading file: {filename} with hash: {hash} to path {path}, token: {token}")
+        await logger.info(f"uploading file: {filename} with hash: {hash} to path {path}, token: {token}")
         await PublisherService.upload_file(f"{path}/{filename}", file)
-        LOGGER.info("uploading MD5SUM file")
+        await logger.info("uploading MD5SUM file")
         await PublisherService.upload_file(f"{path}/MD5SUM", StringIO(hash))
-        LOGGER.info("all files were uploaded")
+        await logger.info("all files were uploaded")
         return True
 
     @classmethod
@@ -40,7 +38,4 @@ class BatchService:
         cache = await RedisBackend(settings.REDIS_URL).get_instance()
         table: str = batch.table_name.lower()
         updated_at: int = batch.last_updated_at
-        last_updated_at: int = max(int(await cache.get(key=table) or 0), updated_at)
-        LOGGER.info(f"Configuring last ran date to table: {table}, timestamp: {last_updated_at}")
-        await cache.set_cache(key=table, value=last_updated_at, ttl=-1)
-        LOGGER.info("last ran was set successfully")
+        await cache.set_table_last_updated(table, updated_at)

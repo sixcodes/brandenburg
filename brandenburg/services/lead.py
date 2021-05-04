@@ -10,9 +10,7 @@ from brandenburg.config import settings
 from brandenburg.models.lead import LeadModel
 from brandenburg.services.publisher import PublisherService
 from brandenburg.toolbox._backends.redis import RedisBackend
-from brandenburg.toolbox.logger import log
-
-logger = log.get_logger(__name__)
+from brandenburg.toolbox.logger import logger
 
 
 class LeadService:
@@ -22,9 +20,9 @@ class LeadService:
 
         is_valid: bool = await cache.is_valid_token(token)
         if is_valid:
-            logger.info(f"Is valid token with data")
+            await logger.info(f"Is valid token with data")
             res = await PublisherService.publish(lead.dict(), lead.by)
-            logger.info(f"sent_to_queue: {bool(res)}, lead: {lead}")
+            await logger.info(f"sent_to_queue: {bool(res)}, lead: {lead}")
             return lead.dict(), True
         return (
             {"status": "error", "message": f"Token {token} is invalid"},
