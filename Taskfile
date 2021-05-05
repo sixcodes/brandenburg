@@ -18,6 +18,13 @@ function test {
     py.test -s -v --cov=./ --cov-report term-missing -v
 }
 
+function fmt {
+    rm -vrf ./build ./dist ./*.pyc ./*.tgz ./*.egg-info ./out ./*/out ./.mypy_cache ./*/.mypy_cache */.pytest_cache \
+    .pytest_cache .serverless/* >> /dev/null
+    black -S -t py37 -t py38 -v --line-length 120 --exclude node_modules/* .
+    isort -j 4 --line-width 120 --use-parentheses --no-inline-sort --multi-line 3 --trailing-comma brandenburg tests
+    mypy ./ --ignore-missing-imports
+}
 
 
 
@@ -32,8 +39,6 @@ function build {
 
 
 function start {
-    rm -vrf ./build ./dist ./*.pyc ./*.tgz ./*.egg-info ./out ./*/out ./.mypy_cache ./*/.mypy_cache */.pytest_cache \
-    .pytest_cache .serverless/* >> /dev/null
     echo "starting ..."
 
     docker-compose -f platform/docker/docker-compose.yml up -d
