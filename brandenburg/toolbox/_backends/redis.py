@@ -97,6 +97,16 @@ class RedisBackend:
 
         return False
 
+    async def is_valid_token(self, token: str) -> Optional[bool]:
+        try:
+            exists: str = await self._pool.exists(token)
+            if exists:
+                return True
+        except ReplyError as ex:
+            await logger.error(ex)
+
+        return False
+
     async def get_or_create(self, key: str, value: str = "") -> Tuple[str, bool]:
         """
         This avoid the same key to be send twice to be processed

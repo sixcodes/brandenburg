@@ -1,6 +1,6 @@
 # Third party imports
 from fastapi import APIRouter, Request, status
-from fastapi.responses import UJSONResponse
+from fastapi.responses import ORJSONResponse
 
 # Local application imports
 from brandenburg.models.lead import LeadModel
@@ -37,8 +37,8 @@ async def create_lead(lead: LeadModel, request: Request, token: str):
     result, processed = await LeadService.execute(str(token), lead)
     await logger.info(f"response: {result}, processed: {processed}")
     if processed:
-        return UJSONResponse(
+        return ORJSONResponse(
             status_code=status.HTTP_201_CREATED,
             content={"status": "ok", "message": "Batch Accepted!"},
         )
-    return UJSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=result)
+    return ORJSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=result)

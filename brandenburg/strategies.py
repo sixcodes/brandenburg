@@ -17,11 +17,11 @@ class ProviderStrategy:
         except AttributeError as ex:
             logger.error(ex)
 
-    def context_publish(self, topic: str, data: bytes, **attrs):
-        self._strategy.publish(topic, data, **attrs)
+    async def context_publish(self, topic: str, data: bytes, **attrs):
+        await self._strategy.publish(topic, data, **attrs)
 
-    def context_create_topics(self, topics: List[str]):
-        self._strategy.create_topics(topics)
+    async def context_create_topics(self, topics: List[str]):
+        await self._strategy.create_topics(topics)
 
-    def context_upload_file(self, path: str, file: bytes, **kwargs):
-        self._strategy.upload_file(path, file, **kwargs)
+    async def context_upload_file(self, path: str, file: bytes, **kwargs):
+        await self._strategy.upload_file(path, file, **kwargs)

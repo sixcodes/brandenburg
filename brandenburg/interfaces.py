@@ -5,19 +5,19 @@ from typing import List, Dict
 
 class ProviderInterface(metaclass=ABCMeta):
     @abstractmethod
-    def get_credentials(self) -> None:
+    async def get_credentials(self) -> None:
         raise NotImplementedError("get_credentials method is not implemented!")
 
     @abstractmethod
-    def publish(self, topic: str, data, **kwargs) -> None:
+    async def publish(self, topic: str, data, **kwargs) -> None:
         raise NotImplementedError("publish method is not implemented!")
 
     @abstractmethod
-    def create_topics(self, topics: List[str]) -> None:
+    async def create_topics(self, topics: List[str]) -> None:
         raise NotImplementedError("create_topics method is not implemented!")
 
     @abstractmethod
-    def upload_file(self, path: str, file: bytes, **kwargs) -> None:
+    async def upload_file(self, path: str, file: bytes, **kwargs) -> None:
         raise NotImplementedError("publish method is not implemented!")
 
 

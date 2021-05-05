@@ -13,7 +13,7 @@ from brandenburg.interfaces import ProviderInterface
 from brandenburg.toolbox.logger import logger
 
 
-def pub_client():
+async def pub_client():
     # Configure the retry settings. Defaults will be overwritten.
     google_credentials: Json = settings.GOOGLE_CREDENTIALS
     if google_credentials:
@@ -55,16 +55,16 @@ def pub_client():
             }
         }
     }
-    logger.debug("<<<<<<<<<< create a connection >>>>>>>>>")
+    await logger.debug("<<<<<<<<<< create a connection >>>>>>>>>")
     return pubsub_v1.PublisherClient(credentials=credentials)
 
 
-publisher_client = pub_client()
+publisher_client = pub_client
 
 
 class GCP(ProviderInterface):
     @lru_cache(512)
-    def get_credentials(self):
+    async def get_credentials(self):
         """
         TODO: checkif credentials exist if not try to auth with local credentials
         """
@@ -79,40 +79,41 @@ class GCP(ProviderInterface):
             credentials = Credentials.from_service_account_info(google_credentials)
         else:
             credentials = Credentials()
-        logger.info("Authenticating on GCP")
+        await logger.info("Authenticating on GCP")
         credentials = credentials.with_scopes(scopes)
         return credentials
 
-    def create_topics(self, topics: List[str]) -> None:
+    async def create_topics(self, topics: List[str]) -> None:
         """
         TODO: Add a return statement and handle with exceptions
         """
         GOOGLE_PROJECT_ID: str = settings.GOOGLE_PROJECT_ID
-        client: pubsub_v1.PublisherClient = publisher_client
-        logger.info(f"Checking if all topics already exists")
+        client: pubsub_v1.PublisherClient = await publisher_client()
+        await logger.info(f"Checking if all topics already exists")
         existing_topics: List[str] = [
             element.name.split("/")[3] for element in client.list_topics(project=f"projects/{GOOGLE_PROJECT_ID}")
         ]
-        logger.info(f"Existing opics: { existing_topics}")
+        await logger.info(f"Existing opics: { existing_topics}")
         for topic in set(topics).difference(existing_topics):
             topic_name: str = client.topic_path(GOOGLE_PROJECT_ID, topic)
-            logger.info(f"creating topic: {topic_name}")
+            await logger.info(f"creating topic: {topic_name}")
             try:
                 client.create_topic(topic_name)
             except Exception as ex:
-                logger.error(ex)
+                await logger.error(ex)
 
-    def publish(self, topic: str, data: str, **attrs):
+    async def publish(self, topic: str, data: str, **attrs):
         """
         TODO: handle exceptions and retries
         Future: https://github.com/googleapis/python-api-core/blob/02d25799243bd76ac76423a08c063a2bee8d11e4/google/api_core/future/base.py#L23
         """
 
         topic_name: str = f"projects/{settings.GOOGLE_PROJECT_ID}/topics/{topic}"
-        future = publisher_client.publish(topic_name, data, **attrs)
-        logger.info(f"Futures: {future.result()}")
+        client = await publisher_client()
+        future = client.publish(topic_name, data, **attrs)
+        await logger.info(f"Futures: {future.result()}")
 
-    def upload_file(self, path: str, file: bytes, **kwargs):
+    async def upload_file(self, path: str, file: bytes, **kwargs):
         """
         TODO: add exception cases and return statement
         """

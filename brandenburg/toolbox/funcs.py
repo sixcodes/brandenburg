@@ -8,8 +8,8 @@ from typing import Union, Dict, Tuple
 import orjson as json
 
 # Local application imports
+from brandenburg import cache
 from brandenburg.config import settings
-from brandenburg.toolbox._backends.redis import RedisBackend
 from brandenburg.toolbox.logger import logger
 
 
@@ -29,11 +29,10 @@ class Funcs:
 
     @classmethod
     async def generate_token(cls, value: str = "") -> str:
-        redis = await RedisBackend(settings.REDIS_URL).get_instance()
         token: str = await cls._generate_token()
-        ok: bool = await redis.set_cache(token, value)
+        ok: bool = await cache.set(token, value)
         if not ok:
-            await redis.set_cache(redis, token, value)
+            await cache.set(token, value)
         return token
 
     @staticmethod

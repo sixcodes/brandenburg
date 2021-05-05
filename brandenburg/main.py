@@ -97,7 +97,7 @@ app.include_router(
 async def startup_event():
     # TODO: Move PUBSUB/SQS connection to here
     await logger.info(f"Check all topics on {settings.PROVIDER}")
-    ProviderStrategy(settings.PROVIDER)._strategy.create_topics(
+    await ProviderStrategy(settings.PROVIDER)._strategy.create_topics(
         [f"{topic}_{settings.NAMESPACE}" for topic in settings.TOPICS]
     )
     await cache.connect()

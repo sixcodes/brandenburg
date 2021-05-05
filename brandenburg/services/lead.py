@@ -6,17 +6,15 @@ from typing import List, Tuple, Dict, Union
 from pydantic import ValidationError
 
 # Local application imports
-from brandenburg.config import settings
+from brandenburg import cache
 from brandenburg.models.lead import LeadModel
 from brandenburg.services.publisher import PublisherService
-from brandenburg.toolbox._backends.redis import RedisBackend
 from brandenburg.toolbox.logger import logger
 
 
 class LeadService:
     @staticmethod
     async def execute(token: str, lead: LeadModel) -> Union[bool, Tuple[Dict[str, Union[str, List[str]]], bool]]:
-        cache = await RedisBackend(settings.REDIS_URL).get_instance()
 
         is_valid: bool = await cache.is_valid_token(token)
         if is_valid:
