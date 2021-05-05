@@ -4,10 +4,9 @@ from io import StringIO
 from typing import Tuple
 
 # Local application imports
-from brandenburg.config import settings
+from brandenburg import cache
 from brandenburg.models.batch import BatchModel
 from brandenburg.services.publisher import PublisherService
-from brandenburg.toolbox._backends.redis import RedisBackend
 from brandenburg.toolbox.logger import logger
 
 
@@ -34,8 +33,6 @@ class BatchService:
     @classmethod
     async def _set_last_ran(cls, batch: BatchModel) -> None:
 
-        # TODO: Convert the redis connection into a decorator
-        cache = await RedisBackend(settings.REDIS_URL).get_instance()
         table: str = batch.table_name.lower()
         updated_at: int = batch.last_updated_at
         await cache.set_table_last_updated(table, updated_at)

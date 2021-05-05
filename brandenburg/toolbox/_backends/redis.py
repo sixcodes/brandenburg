@@ -125,5 +125,5 @@ class RedisBackend:
         """
         last_updated_ts: int = max(int(await self._pool.get(key=table) or 0), updated_at)
         await logger.info(f"Configuring last ran date to table: {table}, timestamp: {last_updated_ts}")
-        await cls.set(key=table, value=last_updated_ts)
+        await self._pool.set(table, last_updated_ts)
         await logger.info("last ran was set successfully")

@@ -2,9 +2,6 @@
 import asyncio  # pragma: nocover
 from typing import List, Tuple, Dict, Union
 
-# Third party imports
-from pydantic import ValidationError
-
 # Local application imports
 from brandenburg import cache
 from brandenburg.models.lead import LeadModel
@@ -15,7 +12,10 @@ from brandenburg.toolbox.logger import logger
 class LeadService:
     @staticmethod
     async def execute(token: str, lead: LeadModel) -> Union[bool, Tuple[Dict[str, Union[str, List[str]]], bool]]:
-
+        """
+        TODO:
+        """
+        #TODO: Improve the return type, to be more especific
         is_valid: bool = await cache.is_valid_token(token)
         if is_valid:
             await logger.info(f"Is valid token with data")

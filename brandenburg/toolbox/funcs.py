@@ -42,7 +42,7 @@ class Funcs:
         Can be a string, a dict or a integer and the function will return a encoded string
         """
         if isinstance(data, dict):
-            return base64.b64encode(json.dumps(data).encode()).decode()
+            return base64.b64encode(json.dumps(data)).decode()
         else:
             return base64.b64encode(str(data).encode()).decode()
 
