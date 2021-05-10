@@ -1,91 +1,103 @@
 # Brandenburg
 
-## Concepts
-
-`Important`: This project is following the [12factor.net](https://12factor.net/) principles
+A ideia desse projeto é já ser um "start" para seu projeto python. O que temos aqui são configurações pré prontas para que você possa se dedicar inteiramente ao código do seu projeto.
 
 
-## Dependencies API
 
-- Google Cloud Platform or AWS account
-- [Docker](https://docs.docker.com/get-docker/) (Optional)
-- Python 3.7+ (pyenv)
-- Pip (Pipenv)
+O Pipfile já vem com alguns scripts que ajudam nas tarefas do dia a dia e nas checagens do CI.
 
-### Optional (FaaS)
-- Twilio Account (SMS, Whatsapp)
-- Salesforce Marketing Cloud
-- Sendgrid (Email)
-- AWS (SES, SNS)
-- Zenvia (SMS, Whatsapp)
+- ``pipenv run test``
+
+    Roda os testes do projeto. Esse script está configurado para medir a cobertura do pacote ``brandenburg``. Esse pacote deve ser ajustado para o pacote onde seu código vai ficar.
+
+- ``pipenv run lint``
+
+    Roda o ``mypy`` para fazer checagem estática de tipos no código.
+
+- ``pipenv run fmt`` e ``pipenv run fmt-check``
+
+    Roda o black para formatar o código. O comando ``pipenv run fmt-check`` apenas checa se alguma formatação seria necessária. É útil para rodar no processo de CI.
+
+- ``pipenv run isort`` e ``pipenv run isort-check``
+
+    Formata o código ordenando os imports usando o projeto isort. O comando ``pipenv run isort-check`` apenas checa se algum import precisa ser reformatado. É útil para rodar no processo de CI.
 
 
-## DEV Mode
+# Pre-commit Hooks
 
-`Important`:
+Ao instalar o `pre-commit`, todas as vezes que realizar um novo commit, será checado todos os pontos de qualidade do
+codigo, como codestyle, testes, imports e por aí vai.
 
-    - This section is about [config](https://12factor.net/config)
-    - This script has been tested on macOS and Linux(Debian like)
-    - You could see all environment variables in [config.py](brandenburg/config.py)
+Os comandos abaixo devem ser executados apenas quando é feito o clone do projeto.
 
-Inside of the project you have to run the following commands.
-It will check and install all dependencies as needed.
-```
-script/bootstrap
-```
-
-Copy `example.env` to `dev.env` and set the variables though.
-
-#### Running tests
-
-```bash
-script/test
+```shell
+pre-commit install
+pre-commit install --hook-type pre-puh
 ```
 
+# CI/CD
 
-#### To run locally
+Esse repositorio já possui alguns workflows do Github Actions pré-configurados. Os workflows são:
 
-## API
+- `.github/workflows/pull-request.yaml`
 
-````bash
-script/server
-````
+    Esse workflow roda em cada PR aberto no projeto. Roda os testes em múltiplas versões do python e faz checagem de formatação de código, lint (com mypy) e formatação de imports (com isort).
 
-### Deployment
+    Esse workflow faz também upload do relatório de coverage para o [codeclimate](https://codeclimate.com). Perceba que o upload é feito em apenas um versão do python, isso porque o codeclimate rejeita múltiplos upload para um mesmo commit, então precisamos escolher uma das rodadas de teste para fazer o upload.
 
-`Important`: This API is ready to deploy anywhere. However, we are using Heroku to do this job as easy as possible.
+    Para que o upload para o codeclimate funciona você precisa criar um token no CodeClimate e colocar esse token como um secret no seu repositório. O Nome do secret **deve ser**: ``CC_TEST_REPORTER_ID``. Mais sobre a documentação do codeclimate com githubactions: https://docs.codeclimate.com/docs/github-actions-test-coverage
 
+## Changelog Automático
 
-### API on Heroku
-This script has a env name param to read the right env file and set all variable ons heroku
-deployment.
+Esse projeto já vem com o [release-drafter](https://github.com/release-drafter/release-drafter) configurado. Dessa forma, a cada PR megeado na branch [``main``](https://github.blog/changelog/2020-10-01-the-default-branch-for-newly-created-repositories-is-now-main/) (e também na ``master`` para repositório legados) uma Release Draft será atualizada mencionando esse PR.
 
-```bash
-script/deploy stg
+Para fazer uso dessa opção, basta criar quatro labels em seu projeto:
+
+- ``feature``
+- ``bug``
+- ``docs``
+- ``breaking-change``
+
+Todos os PRs que tievem uma (ou mais) dessas labels e forem mergeados pra branch principal, uma release Draft será automaticamente atualizada.
+
+Essa configuração do release-drafter também já calcula a próxima versão baseado no [SemVer](https://semver.org). A configuração é a seguinte:
+
+- A label ``breaking-change`` aumenta a ``major`` version;
+- A label ``feature`` aumenta a ``minor`` version;
+- A label ``bug`` aumenta a ``patch`` version;
+- PR sem label também aumenta a ``patch`` version;
+
+Não se esqueça de de ajustar o links para o seu projeto no arquivo ``.github/release-drafter.yml``.
+
+# Pydantic - Configuração baseada em variáveis de ambiente
+
+Para facilitar na criação de um novo serviço e seguindo as boas práticas definidas no [12factors](https://12factor.net/config) sobre configurações.
+Adicionamos o uso no pydantic para criar e validar essas informações para nós.
+
+Exemplo de uso:
+
+```python
+    from config import settings
+
+    print(settings.DEBUG)
 ```
 
+Para configurar uma variável de ambiente é necessário ficar atento ao prefixo.
+o default do projeto verificar inicialmente para uma variável de ambiente chamada `NAMESPACE`caso não a
+encontre o prefixo será `DEV_`, o que isso significa?
 
-#### API Documentation
+O uso ficará da seguinte forma quando configuramos o namespace sempre adicionaremos o prefixo no
+momento de exportar as variaveis de ambiente.
 
-```bash
-http://127.0.0.1:8000/docs/
+```python
+    NAMESPACE=PROD PROD_DEBUG=False python main.py
 ```
 
-#### Make a resquest
-I have used [httpie](https://httpie.org/) to do this job.
+Caso não definimos nenhum namespace, o prefixo será `DEV`, ou seja
 
-Getting a token
-
-```bash
-http 127.0.0.1:8000/v1/leads/token/
+```python
+    DEV_REDIS_PORT=1234 python main.py
 ```
 
-Sending to Salesforce Marketing cloud
-
-```bash
-http POST 127.0.0.1:8000/v1/leads/16db0bd3-579a-4a61-80b7-99f798013ee2 name=anitta email=anitta2@agrorede1.com phone_number=11912341678
-```
-
-Any problems or doubts, please feel free to contact me.
-
+Lembrando que dentro da sua aplicação o que vale é justamente o nome que foi definido no arquivo config.py, sem o prefixo.
 
