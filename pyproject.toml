@@ -10,7 +10,7 @@ authors = ["Jesue Junior <jesuesousa@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = ">=3.7,<3.10"
-pydantic = {extras = ["dotenv","email"], version = "==1.8.1"}
+pydantic = {extras = ["dotenv","email"], version = "==1.8.2"}
 fastapi = "==0.63.0"
 orjson = "==3.5.2"
 uvicorn = "==0.13.4"
